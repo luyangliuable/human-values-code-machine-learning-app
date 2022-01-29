@@ -30,13 +30,15 @@
 
 <!-- markdown-toc end -->
 
+## Process
+
 ![label applier](readme_files/pic4.png) 
 
-### How to use
+## How to use
 
 #### Label single comment using text area
 Simply place the comment that need labelling into the text area and submit
-![label applier](readme_files/pic1.png') 
+![label applier](readme_files/pic1.png) 
 
 #### Retrieve and predict all comment from git repository for human value mentions
 Select git repo link and enter name of branch in a similar fashion to cloning a git repository. A background queue will complete and create a download file once finish. **This could take a lone time**
@@ -47,7 +49,7 @@ Select git repo link and enter name of branch in a similar fashion to cloning a 
 Upload a csv file and specify a column to label in the csv file.
 ![label applier](readme_files/pic3.png) 
 
-### Requirements
+## Requirements
 **celery** - For background queue and workers to handle background jobs for process heaving machine learning and file processing tasks <br />
 **Flask** - For backend <br />
 **Flask-WTF** - For validating data on frontend <br />
@@ -76,38 +78,38 @@ Upload a csv file and specify a column to label in the csv file.
 
 ## Machine learn
 
-## Steps
+### Steps
 
-### Data Collection
+#### Data Collection
 
-### Create Features
+#### Create Features
 
-### Outlier Removal
+#### Outlier Removal
 
-### Case normalisation
+#### Case normalisation
 
-### Tokenisation
+#### Tokenisation
 
-### Stop word removal
+#### Stop word removal
 
-### Split Compound words
+#### Split Compound words
 
-### Lemmatization
+#### Lemmatization
 
-### Sample Data
+#### Sample Data
 
-### Binarize Labels
+#### Binarize Labels
 
-### Create Models
+#### Create Models
 
-### Training Models
+#### Training Models
 
-### Tune Models
+#### Tune Models
 
-### Evaluate Models
+#### Evaluate Models
 
-### Select Models
+#### Select Models
 
-### Deploy Models
+#### Deploy Models
 
 
