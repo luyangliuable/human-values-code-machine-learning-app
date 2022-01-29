@@ -5,6 +5,10 @@
 
 - [Human Values Research: Swartz Values from code comments](#human-values-research-swartz-values-from-code-comments)
     - [-](#-)
+        - [Label single comment using text area](#label-single-comment-using-text-area)
+        - [Retrieve and predict all comment from git repository for human value mentions](#retrieve-and-predict-all-comment-from-git-repository-for-human-value-mentions)
+        - [Upload and predict CSV files by specifying name of column](#upload-and-predict-csv-files-by-specifying-name-of-column)
+        - [Requirements](#requirements)
     - [Machine learn](#machine-learn)
     - [Steps](#steps)
         - [Data Collection](#data-collection)
@@ -26,82 +30,86 @@
 
 <!-- markdown-toc end -->
 
+## Process
 
-### How to use
+![label applier](readme_files/pic4.png) 
+
+## How to use
 
 #### Label single comment using text area
 Simply place the comment that need labelling into the text area and submit
-![label applier](./readme\ files/pic1.png) 
+![label applier](readme_files/pic1.png) 
 
 #### Retrieve and predict all comment from git repository for human value mentions
 Select git repo link and enter name of branch in a similar fashion to cloning a git repository. A background queue will complete and create a download file once finish. **This could take a lone time**
-![label applier](./readme\ files/pic2.png) 
+![label applier](readme_files/pic2.png) 
 
 
 #### Upload and predict CSV files by specifying name of column
 Upload a csv file and specify a column to label in the csv file.
-![label applier](./readme\ files/pic3.png) 
+![label applier](readme_files/pic3.png) 
 
-### Requirements
-*celery* - For background queue and workers to handle background jobs for process heaving machine learning and file processing tasks 
-*Flask* - For backend
-*Flask-WTF* - For validating data on frontend
-*pytest* - for testing
-*flower* - A dashboard to visualise process and tasks from background works in celery
-*chardet* - Helps with decoding different types of files
-*Flask-DebugToolbar* - Flask toolbar useful for debugging
-*GitPython* - Tool used to retrieve files from branches in github repositories
-*gunicorn* - WSGI python http server for UNIX based systems
-*Jinja2* - Tool used to help flask render templates
-*joblib* - used to dump machine learning models and vocabulary
-*matplotlib* - used to help visualise date and plotting
-*missingno* - used to help with visualising missing or empty data
-*nltk* - natural language processing toolkit
-*numpy* - used to facilitate mathematics operations inside python
-*pandas* - used to create dataframe and read csv files 
-*regex* - used to for regular expressions
-*scikit-learn* - machien learning models
-*scipy* - helped with combining sparse matrices
-*seaborn*
-*sklearn* - used for creating machine learning models such as gbdt, knn, svc, decision trees, multiple layer perceptron and model selection
-*Werkzeug* - securely save files
-*redis* - a ram based database system to handle background workers and databases
+## Requirements
+**celery** - For background queue and workers to handle background jobs for process heaving machine learning and file processing tasks <br />
+**Flask** - For backend <br />
+**Flask-WTF** - For validating data on frontend <br />
+**pytest** - for testing <br />
+**flower** - A dashboard to visualise process and tasks from background works in celery <br />
+**chardet** - Helps with decoding different types of files <br />
+**Flask-DebugToolbar** - Flask toolbar useful for debugging <br />
+**GitPython** - Tool used to retrieve files from branches in github repositories <br />
+**gunicorn** - WSGI python http server for UNIX based systems <br />
+**Jinja2** - Tool used to help flask render templates <br />
+**joblib** - used to dump machine learning models and vocabulary <br />
+**matplotlib** - used to help visualise date and plotting <br />
+**missingno** - used to help with visualising missing or empty data <br />
+**nltk** - natural language processing toolkit <br />
+**numpy** - used to facilitate mathematics operations inside python <br />
+**pandas** - used to create dataframe and read csv files  <br />
+**regex** - used to for regular expressions <br />
+**scikit-learn** - machien learning models  <br />
+**scipy** - helped with combining sparse matrices <br />
+**seaborn** <br />
+**sklearn** - used for creating machine learning models such as gbdt, knn, svc, decision trees, multiple layer perceptron and model selection <br />
+**Werkzeug** - securely save files <br />
+**redis** - a ram based database system to handle background workers and databases <br />
+
 
 
 ## Machine learn
 
-## Steps
+### Steps
 
-### Data Collection
+#### Data Collection
 
-### Create Features
+#### Create Features
 
-### Outlier Removal
+#### Outlier Removal
 
-### Case normalisation
+#### Case normalisation
 
-### Tokenisation
+#### Tokenisation
 
-### Stop word removal
+#### Stop word removal
 
-### Split Compound words
+#### Split Compound words
 
-### Lemmatization
+#### Lemmatization
 
-### Sample Data
+#### Sample Data
 
-### Binarize Labels
+#### Binarize Labels
 
-### Create Models
+#### Create Models
 
-### Training Models
+#### Training Models
 
-### Tune Models
+#### Tune Models
 
-### Evaluate Models
+#### Evaluate Models
 
-### Select Models
+#### Select Models
 
-### Deploy Models
+#### Deploy Models
 
 
