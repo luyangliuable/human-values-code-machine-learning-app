@@ -30,22 +30,22 @@
 
 <!-- markdown-toc end -->
 
-![label applier]('./readme_files/pic4.png') 
+![label applier](readme_files/pic4.png) 
 
 ### How to use
 
 #### Label single comment using text area
 Simply place the comment that need labelling into the text area and submit
-![label applier]('./readme_files/pic1.png') 
+![label applier](readme_files/pic1.png') 
 
 #### Retrieve and predict all comment from git repository for human value mentions
 Select git repo link and enter name of branch in a similar fashion to cloning a git repository. A background queue will complete and create a download file once finish. **This could take a lone time**
-![label applier]('./readme_files/pic2.png') 
+![label applier](readme_files/pic2.png) 
 
 
 #### Upload and predict CSV files by specifying name of column
 Upload a csv file and specify a column to label in the csv file.
-![label applier]('./readme_files/pic3.png') 
+![label applier](readme_files/pic3.png) 
 
 ### Requirements
 **celery** - For background queue and workers to handle background jobs for process heaving machine learning and file processing tasks <br />
