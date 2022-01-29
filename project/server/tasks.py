@@ -16,9 +16,5 @@ def create_task(info):
     file = info['file']
     machine_learning.background_file_labeler(file)
     print('success')
-    print('success')
-    print('success')
-    print('success')
-    print('success')
     return True
 

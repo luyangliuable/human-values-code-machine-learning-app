@@ -1,23 +1,31 @@
 # project/server/main/views.py
+
 import os
+
 from flask import render_template, Blueprint, jsonify, request, Response
 from celery.result import AsyncResult
 from project.server.tasks import create_task
+
 from project.machine_learning import app as machine_learning
+
 main_blueprint = Blueprint("main", __name__,)
+
 upload_folder = './project/client/static/'
 
 @main_blueprint.route('/label', methods=["GET", "POST"])
 def label():
     return machine_learning.label()
 
+
 @main_blueprint.route("/file_labeler", methods=["POST"])
 def file_labeler():
     return machine_learning.file_labeler()
 
+
 @main_blueprint.route("/repo", methods=["POST"])
 def repo():
     return machine_learning.repo()
+
 
 @main_blueprint.route("/", methods=["GET"])
 def home():
@@ -34,16 +42,14 @@ def run_task():
     filename = file.filename
     file = request.files.get('file')
     filepath =  upload_folder + filename
-    print('downloading file', filename)
     file.save(filepath)
     print('download complete')
     print('starting task to predict file')
     info = { 'file': filepath }
-    print(info)
     task = create_task.delay(info)
     print(task.id)
     # return Response({"task_id": task.id}, status=201)
-    return jsonify({"task_id": task.id}), 200
+    return jsonify({"task_id": task.id}), 202
 
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])

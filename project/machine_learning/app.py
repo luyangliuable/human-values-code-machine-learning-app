@@ -67,7 +67,7 @@ def taskstatus(task_id):
         }
     return jsonify(response)
 
-def plot_graph(counter, savedir):
+def plot_graph(counter):
   all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
   amount = []
   labels = []
@@ -79,13 +79,14 @@ def plot_graph(counter, savedir):
     if l not in labels:
       labels.append(l)
       amount.append(0)
+
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
 
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
 
-  plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], file), bbox_inches='tight', pad_inches=.1)
+  file = plt.savefig('label_distribution.jpg', bbox_inches='tight', pad_inches=.1)
 
   return file
 
