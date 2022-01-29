@@ -18,6 +18,7 @@ def label():
 
 @main_blueprint.route("/file_labeler", methods=["POST"])
 def file_labeler():
+
     machine_learning.file_labeler()
     return render_template("main.html", result="getting result")
 

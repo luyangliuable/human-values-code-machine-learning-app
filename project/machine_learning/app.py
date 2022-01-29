@@ -52,9 +52,10 @@ def plot_graph(counter, savedir):
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
 
-  plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], file), bbox_inches='tight', pad_inches=.1)
+  filename = os.path.join(savedir, 'label_distribution.jpg')
+  plt.savefig(filename, bbox_inches='tight', pad_inches=.1)
 
-  return file
+  return filename
 
 
 def allowed_file(filename):
@@ -70,17 +71,6 @@ def background_file_labeler(file):
   processed_files = []
 
   download_folder = "./project/server/"
-
-  # if file.filename == '':
-  #   flash('No selected file')
-  #   return redirect(request.url)
-
-  # if file and allowed_file(file.filename):
-  # print('downloading', file.filename)
-  # file = secure_filename(file.filename)
-  # filename = file.filename
-  # filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-  # file.save(filepath)
   filename = file
   predicted_filename = 'predicted_file.csv'
   print("processing file: " + filename)
@@ -96,21 +86,20 @@ def background_file_labeler(file):
   tmp = data['prediction'].values
 
   values = []
-  print('Creating chart.')
   for item in tmp:
     if item == item:
       values = values + item.strip().split(' ')
 
-  image = plot_graph(Counter(values))
+  print('Creating chart.')
+  image = plot_graph(Counter(values), download_folder)
   print(image)
 
   res = ""
   for key, val in Counter(values).items():
     res = res + key + ': ' + str(val) + ' '
 
-  download = send_file(predicted_file)
-
-  return render_template('main.html', result=res, image=image, download=download)
+  return {'count': res, 'image': image, 'file': predicted_file }
+  # return render_template('main.html', result=res, image=image, download=predicted_file)
 
 def file_labeler():
   if 'file' not in request.files:
