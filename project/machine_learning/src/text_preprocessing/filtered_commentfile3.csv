@@ -1,0 +1,4 @@
+line,location,language,value,category,keywords,description
+re-checkout as the commit ref because otherwise gclient sync clobbers the branch for braveCoreRef and doesn't set it to the correct commit for some reason ,/Users/rubber/brave-browser/scripts/init.js: 26,javascript,['obeys choice'],['Self_direction'],"['commit', 'commit']",conforms with value
+Handle checkout failure ,/Users/rubber/brave-browser/scripts/init.js: 31,javascript,['violates healthy'],['Security'],['failure'],value violation
+Checkout was successful ,/Users/rubber/brave-browser/scripts/init.js: 35,javascript,['obeys successful'],['Achievement'],['successful'],conforms with value

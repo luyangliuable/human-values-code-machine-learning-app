@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'myfont';
+    src: url('fonts/woff2/FiraCode-Regular.woff2') format('woff2'),
+         url("fonts/woff/FiraCode-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    font-family: myfont;
+}
+
+.button, input[type='submit']:active {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                           supported by Chrome, Edge, Opera and Firefox */
+    background: #1e90ff;
+    padding: 20px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    font-family: arial;
+    width: 150px;
+    font-size: 12px;
+    color: white;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    box-shadow: 1px 1px 3px #CCBCAA;
+    -webkit-box-shadow: 1px 1px 3px #CCBCAA;
+    -moz-box-shadow: 1px 1px 3px #CCBCAA;
+    -ms-box-shadow: 1px 1px 3px #CCBCAA;
+}
+
+
+textarea {
+    width: 500px;
+    resize: none;
+    border: 1px solid #1e90ff;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    box-shadow: inset 1px 1px 2px #CCB;
+    -webkit-box-shadow: inset 1px 1px 2px #CCB;
+    -moz-box-shadow: inset 1px 1px 2px #CCB;
+    padding: 12px;
+    height: 300px;
+    width: 500px;
+    margin-bottom: 12px;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+
+
+input[type='text'] {
+    background: white;
+    border: 1px solid #CCBCAA;
+    padding: 10px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    box-shadow: 1px 1px 3px #CCBCAA;
+    -webkit-box-shadow: 1px 1px 3px #CCBCAA;
+    -moz-box-shadow: 1px 1px 3px #CCBCAA;
+    -ms-box-shadow: 1px 1px 3px #CCBCAA;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+

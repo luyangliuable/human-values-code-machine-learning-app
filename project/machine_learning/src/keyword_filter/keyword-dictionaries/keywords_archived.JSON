@@ -1,0 +1,264 @@
+{
+    "choosing own goals": {
+        "synonyms": [
+            "be sure", "work around", "override", "keep", "for how", "skip", "uncomment", "you may", "instead", "could be replaced", "avoid problems", "make sure", "run this", "see", "todo", "value", "wait until", "if so", "backup", "asap", "as soon as possible"
+        ],
+        "antonyms": ["anymore", "no point", "must", "should not", "do not", "don't"],
+        "category": "self-direction"
+    },
+    "freedom": {
+        "synonyms": ["easier", "freedom","leeway","liberty","prerogative","profligacy","unrestraint","autonomy","citizenship","democracy","emancipation","self-government","sovereignty","enfranchisement"],
+        "antonyms": ["only by", "restraint","confinement","incarceration","restriction","servitude","slavery","subordination","suppression","imprisonment","incarceration","restraint","captivity","difficulty"],
+        "category": "Self_direction"
+    },
+    "creativity": {
+        "synonyms": ["algorithm", "solve", "clear", "creativity","cleverness","inspiration","innovativeness","artfulness","brilliance","craftship","flair","genius","mastery","proficiency","Einstein","acumen","adept","aptitude","astuteness","discernment","endowment","expert","ingenuity","inspiration","prodigy"],
+        "antonyms": ["fruitless","inept","uncreative","unfruitful","unproductive","unimaginative","uninspired","imitative"],
+        "category": "Self_direction"
+    },
+    "independent": {
+        "synonyms": ["independent","autonomous","nonpartisan","self-reliant","sovereign","freewheeling","individualistic","unaided","unallied","unconstrained","uncontrolled","unregimented"],
+        "antonyms": ["dependent","subordinate","subservient","reliant","controlled"],
+        "category": "Self_direction"
+    },
+    "privacy": {
+        "synonyms": ["hide", "request", "history", "ask", "confirm", "token", "cryter", "password", "hidden", "privacy","concealment","sequestration","solitude","clandestineness", "confidential","exclusive","secret","privy","clandestine","hushed","nonpublic","secluded","secret","solitary","concealed","discreet","intrusive","permission"],
+        "antonyms": ["visible", "revealed","unconcealed","overt","track","suspicious","spy"],
+        "category": "Self_direction"
+    },
+    "choice": {
+        "synonyms": ["choose","pick","select","accept","adopt","cast","elect","prefer","espouse","predestine","wish","commit","decide","choice","opt for","take up","allot","assign","delegate","nominate","ordain"],
+        "antonyms": ["abstain","disallow","refuse","reject","repudiate","repulse"],
+        "category": "Self_direction"
+    },
+    "curious": {
+        "synonyms": ["example", "for your information", "fyi", "might", "curious","inquisitive","examining","impertinent","inquiring","inspecting","investigative","meddlesome","meddling","nosy","prying","scrutinizing","snoopy","interest"],
+        "antonyms": ["incurious","uninterested","outdated","embarrass"],
+        "category": "Self_direction"
+    },
+    "self respect": {
+        "synonyms": ["dignity","pride","self-assurance","self-confidence","self-esteem","self-worth","self-regard","pride in oneself","prestige","honour"],
+        "antonyms": ["diffidence","unsureness","self-deprecation","discredit","disesteem","disgrace","dishonor","humiliation","ignominy","infamy","opprobrium"],
+        "category": "Self_direction"
+    },
+    "excitment": {
+        "synonyms": ["excitment","astonishing","breathtaking","dramatic","intriguing","stimulating","thrilling","arousing","electrifying","impelling","intoxicating","overpowering","rousing","stirring","titillating","exhilarant","eye-popping","far-out","groovy","hair-raising","heady","mind-blowing","sensational","spine-tingling","wild"],
+        "antonyms": ["boring","dull","unexciting","unmoving","unstimulating","unenthused","unenthusiastic","uninspiring","unpromising","mind-numbing","tedious","tiresome","dreary","humdrum","monotonous"],
+        "category": "Stimulation"
+    },
+    "varied": {
+        "synonyms": ["varied","diverse","mixed","assorted","variety","heterogeneous","indiscriminate"],
+        "antonyms": ["same","uniform","unvaried","alike","identical","monolithic"],
+        "category": "Stimulation"
+    },
+    "daring": {
+        "synonyms": ["daring","audacious","bold","courageous","foolhardy","gutsy","impulsive","reckless","brave","adventuresome","nervy"],
+        "antonyms": ["afraid","cautious","cowardly","shy","timid","bashful","unadventurous","unwilling"],
+        "category": "Stimulation"
+    },
+    "pleasure": {
+        "synonyms": ["pleasure", "cover content", "animate", "smart", "simple", "visibility", "selectability", "manually", "fast", "exact", "frequently", "convenient", "easier", "smooth", "slick", "easy", "compact", "soft", "shortcut", "for better", "periodically", "automatically", "timely", "immediate", "pleasure","amusement","bliss","enjoyment","gratification","hobby","joy","buzz","entertainment","felicity","gladness","indulgence","joyride","recreation","relish","revelry","solace","gratification","happiness","satisfaction","delight"],
+        "antonyms": ["cumbersome", "troublesome", "clunky", "out of luck", "flag", "problem", "crash", "delay", "mess", "slow", "lag", "glitchy", "discontent","displeasure","dissatisfaction","misery","sadness","sorrow","woe","apathy","blandness","chore","dislike","melancholy","pain","trouble","misery","wretchedness","anguish","desolation","joylessness","dejection","depression","despondency","dispiritedness","gloom","aggravation","annoyance","exasperation","irritation","vexation","anger","fury","rage","agitation","distress","uneasiness","frustration"],
+        "category": "Hedonism"
+    },
+    "self indulgent": {
+        "synonyms": ["self-indulgent","hedonistic","decadent","indulgent","overindulgent","extravagant","incontinent","splurging","self-absorbed","self-obsessed"],
+        "antonyms": ["restrained","self-abnegating","self-denying","abstemious","abstinent","continent","sober","ascetic","austere"],
+        "category": "Hedonism"
+    },
+    "enjoying": {
+        "synonyms": ["love","relish","savor","fond","rejoice"],
+        "antonyms": ["detest","abhorring","abominating","condemning","despising","scorning"],
+        "category": "Hedonism"
+    },
+    "ambitious": {
+        "synonyms": ["ambitious","aggressive","energetic","enthusiastic","ardent","aspiring","goal-oriented","high-reaching","industrious","self-starting","striving","vaulting","competing","rivalrous","go-getting","self-seeking"],
+        "antonyms": ["lethargic","unenthusiastic","unassuming","indifferent","uneager","unenthusiastic","unexcited","easygoing","halfhearted","lukewarm","tepid","lazy","lethargic","listless","sluggish","spiritless","unaggressive","unassertive","ambitionless","unambitious"],
+        "category": "Achievement"
+    },
+    "influential": {
+        "synonyms": ["influential","famous","persuasive","efficacious","guiding","instrumental","major-league","potent"],
+        "antonyms": ["inconspicuous","ineffectual","uninfluential","unmoving","uncelebrated","inept","inexpert","unfit","unqualified","follower"],
+        "category": "Achievement"
+    },
+    "capable": {
+        "synonyms": ["capable","accomplished","adept","adequate","proficient","qualified","skillful","talented","adapted"],
+        "antonyms": ["clumsy","inadequate","incapable","ineffective","inept","inexperienced","unqualified","unskilled","untalented","impotent","unskillful","unfit"],
+        "category": "Achievement"
+    },
+    "successful": {
+        "synonyms": ["successful","fruitful","lucrative","outstanding","prosperous","rewarding","strong","wealthy","auspicious","bestselling","blooming","blossoming","champion","crowned","efficacious","extraordinary","flourishing","fortuitous","moneymaking","notable","noteworthy","thriving","triumphant","unbeaten","undefeated","victorious"],
+        "antonyms": ["unlucky","unsuccessful","forfeiting","losing","unprofitable","futureless","inauspicious","unpromising","collapsing","flopping","flunking","folding","washing-out","slipping","slumping","waning","bankrupt","kaput"],
+        "category": "Achievement"
+    },
+    "intelligent": {
+        "synonyms": ["intelligent","astute","bright","brilliant","perceptive","rational","wise","comprehending","discerning","enlightened","highbrow","instructed","profound","quick-witted","sage","witty"],
+        "antonyms": ["unaware","uneducated","unintelligent","uninventive","unresourceful","foolish","idiotic","imbecile","wacky","senseless","mindless","witless","stupid","dumb","pathetic"],
+        "category": "Achievement"
+    },
+    "wealth": {
+        "synonyms": ["wealth","abundance","affluence","property","revenue","riches","treasure","assets","bounty","capital","luxury","opulence","plenty","profusion","opulence","wherewithal"],
+        "antonyms": ["debt","poverty","scarcity","indebtedness","liabilities"],
+        "category": "Power"
+    },
+    "authority": {
+        "synonyms": ["require", "law", "copyright", "licence", "authority","jurisdiction","ascendancy","clout","esteem","prerogative","prestige","sway"],
+        "antonyms": ["lethargy","prohibition"],
+        "category": "Power"
+    },
+    "reputation": {
+        "synonyms": ["popular", "reputation","fame","honor","notoriety","prestige","stature","renown"],
+        "antonyms": ["disbelief","discredit","dishonor","disrepute","ignominy","infamy","obloquy","opprobrium","reproach","tarnish"],
+        "category": "Power"
+    },
+    "recognition": {
+        "synonyms": ["approval","salute","acclaim","accolade","homage","kudos","laurels","megastardom","stardom","superstardom","glory","illustriousness","preeminence","idolization"],
+        "antonyms": ["inconspicuousness","invisibility","unpopularity","oblivion"],
+        "category": "Power"
+    },
+    "security": {
+        "synonyms": ["lock", "callback", "risk", "validation", "callback", "security","ammunition","armor","defense","guard","munitions","weapon","weaponry","fort","fortress","safety"],
+        "antonyms": ["exposing", "expose", "threat", "access", "unexpected", "leak", "endangerment","harm","danger","insecurity","attack","hazard","risk","threat","instability","precariousness","liability","violability","vulnerability","vulnerableness","susceptibility","susceptibleness","endangerment","imperilment","jeopardy","peril","unofficial","unsafe"],
+        "category": "Security"
+    },
+    "family": {
+        "synonyms": ["family","clan","folk","household","tribe","ancestors","ancestry","blood","children","descendants","descent","dynasty","forebears","genealogy","in-laws","parentage","progenitors","progeny","siblings","child","wife","husband","boyfriend","girlfriend","partner"],
+        "antonyms": ["alien","foreigner","nonfamily","nonrelatives","stranger"],
+        "category": "Security"
+    },
+    "belonging": {
+        "synonyms": ["belonging","inclusion","rapport","chumminess","inseparability","intimacy","affinity","kinship","fondness","fidelity","amity","fellowship","friendship","affability","conviviality","cordiality","geniality","mutuality","cliquishness","clubbiness"],
+        "antonyms": ["hatred","antipathy","aloofness","coldness","racism"],
+        "category": "Security"
+    },
+    "social order": {
+        "synonyms": ["population","camaraderie","stratum","rank","brotherhood","consortium","fraternity","guild","league","society"],
+        "antonyms": ["disorder","disunity"],
+        "category": "Security"
+    },
+    "healthy": {
+        "synonyms": ["supported", "good state", "guarantee", "athletic","hearty","robust","vigorous","virile","sturdy","potent","restored","bouncing","hale"],
+        "antonyms": ["alert", "danger", "disconnect", "crash", "hang the system", "attention", "corrupt", "try often", "failure", "fault", "defect", "bug", "abort", "fail", "error", "warning", "no guarantee", "delicate","feeble","infirm","lethargic","soft","unhealthy","weak","diseased","fragile","ill","indisposed","sick","ailing","unfit","unsound","unwell","injury"],
+        "category": "Security"
+    },
+    "clean": {
+        "synonyms": ["factorize", "factorise", "clean","graceful","hygienic","immaculate","neat","spotless","tidy","unblemished","washed","cleansed","laundered","sparkling","speckless","stainless","trim","delicate","dirtless","flawless","sanitary","taintless","unpolluted","unsmudged","unsoiled","unspotted","unstained","unsullied","untarnished","well-kept"],
+        "antonyms": ["unused", "missing", "conflict", "messy", "mess", "cloudy","contaminated","dirty","disorganized","sloppy","slovenly","soiled","tainted","unclean","unsterile","untidy","cluttered","defiled","muddled","polluted","stained"],
+        "category": "Security"
+    },
+    "obedient": {
+        "synonyms": ["consistency", "consistent", "standard", "use same", "obedient","deferential","docile","acquiescent","amenable","complaisant","obeisant","pliant","reverential","tame","well-trained","willing","yielding"],
+        "antonyms": ["instead", "guess", "disobedient","inconstant","insolent","misbehaving","mutinous","obstinate","rebellious","balky","defiant","incompliant","insubordinate","intractable","noncompliant","rebel","rebellious","recalcitrant","unamenable","unruly","wayward"],
+        "category": "Conformity"
+    },
+    "self discipline": {
+        "synonyms": ["self-discipline","continence","restraint","self-containment","self-mastery","self-possession","self-restraint","self-abnegation","self-denial","temperateness","discipline","mastery","abnegation","abstention","abstinence","soberness","sobriety","composure","equanimity","poise","self-confidence"],
+        "antonyms": ["gratification","indulgence","self-indulgence","intemperateness","overindulgence","demerit","feebleness","foible","frailty","shortcoming","vice","indiscipline","unconstraint","unreserve","unrestraint"],
+        "category": "Conformity"
+    },
+    "politeness": {
+        "synonyms": ["kind", "courteousness","courtesy","gentility","graciousness","formality","chivalrousness","chivalry","courtliness","gallantry","decency","gentilesse","propriety","sociability"],
+        "antonyms": ["discourteousness","discourtesy","impoliteness","incivility","rudeness","surliness","ungraciousness","brashness","brassiness","impertinence","impudence","insolence","sauciness","boorishness","churlishness","loutishness","vulgarity","impropriety","indecency"],
+        "category": "Conformity"
+    },
+    "tradition": {
+        "synonyms": ["mother tongue", "tradition","folklore","heritage","legend","ritual","convention","norm","legacy","culture"],
+        "antonyms": ["heedlessness","deviation","divergence","irregularity"],
+        "category": "Tradition"
+    },
+    "devout": {
+        "synonyms": ["devout","ardent","fervent","pious","zealous","adherent","fervid","godly","pietistic","prayerful","profound","reverent","revering","worshiping","dedicated","staunch","steadfast"],
+        "antonyms": ["dispassionate","frigid","indifferent","unenthusiastic","fickle","perfidious","faltering","hesitant","vacillating","wavering","irresolute","shaky"],
+        "category": "Tradition"
+    },
+    "detachment": {
+        "synonyms": ["detachment","indifference","dreaminess","nonpartisanship","unconcern"],
+        "antonyms": ["emotive", "emotion","emotionalism","partisanship"],
+        "category": "Tradition"
+    },
+    "humble": {
+        "synonyms": ["humble","gentle","modest","self-effacing","unpretentious","down-to-earth","lowly","meek","unassuming","humility"],
+        "antonyms": ["arrogant","chesty","conceited","egotistic","haughty","highfalutin","high-and-mighty","high-handed","high-hat","hoity-toity","huffish","huffy","overweening","pompous","presuming","presumptuous","pretentious","self-asserting","self-assertive","superior"],
+        "category": "Tradition"
+    },
+    "moderate": {
+        "synonyms": ["moderate","curbed","inhibited","levelheaded","sensible"],
+        "antonyms": ["inordinate","radical","extremist","fanatic","rabid","unbridled","unchecked","unrestrained","immoderate","edgy"],
+        "category": "Tradition"
+    },
+    "helpful": {
+        "synonyms": ["how to use", "manual", "guide", "help", "helpful","advantageous","conducive","constructive","convenient","crucial","essential","important","invaluable","profitable","supportive","benevolent","efficient"],
+        "antonyms": ["hindering","inappropriate","inessential","insignificant","nonessential","unfavorable","unfriendly","unhelpful","unimportant","unsuitable","useless","worthless","unconstructive","inefficient"],
+        "category": "Benevolence"
+    },
+    "responsible": {
+        "synonyms": ["remove after", "FIXME", "reasonable", "wish", "check", "up to date", "verify", "actively maintain", "fixed", "contract", "honour", "reliable", "solid", "steady", "trustable"],
+        "antonyms": ["ignored", "bother", "unable", "accept errors", "don't care", "unaccountable","immature","irresponsible","undependable"],
+        "category": "Benevolence"
+    },
+    "forgiving": {
+        "synonyms": ["forgiving","absolve","condone","acquit","amnesty","commute","exonerate","overlook","vindicating","remitting","shrugging off","redeeming","unburdening"],
+        "antonyms": ["unforgiving","condemn","accuse","blame","censure","punish","resent","avenging","redressing","requiting","retaliating","revenging","penalizing"],
+        "category": "Benevolence"
+    },
+    "honest": {
+        "synonyms": ["honest","authentic","conscientious","equitable","fair","forthright","honorable","sincere","virtuous","veracious","candid","forthcoming","credible","veritable","artless","guileless","scrupulous","aboveboard","transparent"],
+        "antonyms": ["dishonest","counterfeit","deceitful","deceptive","devious","false","insincere","fraudulent","lying","misleading","treacherous","untruthful","unbelieving","dodgy","propaganda","dubious","deceive","fraud","distrust","illegitimate","imprecise","inaccurate","untrustworthy","wrong","corrupt","cheating","untrue","fake"],
+        "category": "Benevolence"
+    },
+    "loyal": {
+        "synonyms": ["loyal","devoted","dutiful","patriotic","staunch","steadfast"],
+        "antonyms": ["disloyal","inconstant","traitorous","unfaithful"],
+        "category": "Benevolence"
+    },
+    "spiritual": {
+        "synonyms": ["spiritual","divine","metaphysical","sacred","holy","religious","faith"],
+        "antonyms": ["bodily","irreligious","irreverent","unspiritual","carnal","fleshly","mundane","terrene","terrestrial","nonreligious","profane","secular"],
+        "category": "Benevolence"
+    },
+    "friendship": {
+        "synonyms": ["friend", "pal", "mate", "buddy", "agreement","intimacy","pact","acquaintanceship","charity","cordiality","cordialness","collegiality","comradeship"],
+        "antonyms": ["malevolence","venom","antagonism","antipathy","enmity","hostility","malice","rancor","belligerency","quarrelsomeness"],
+        "category": "Benevolence"
+    },
+    "equality": {
+        "synonyms": ["ignore non-English", "ignore nonEnglish", "supported modes", "English", "language", "support", "equality","parity","commensurateness","equatability","equilibrium","equipoise","uniformity"],
+        "antonyms": ["disproportion","imbalance","inequality","imparity","nonequivalence"],
+        "category": "Universalism"
+    },
+    "wisdom": {
+        "synonyms": ["wisdom","foresight","judgment","poise","prudence","sanity","circumspection","discernment","discrimination","enlightenment","erudition","judiciousness","shrewdness","insight"],
+        "antonyms": ["folly","foolishness","imbecility","silliness","witlessness","unsoundness","lunacy","madness","preposterousness","senselessness","zaniness","superficial"],
+        "category": "Universalism"
+    },
+    "harmony": {
+        "synonyms": ["integral", "harmony","conformity","consensus","cooperation","amicability","compatibility"],
+        "antonyms": ["disharmony","disagreement","discord","incompatibility","cacophony","clash","disproportion"],
+        "category": "Universalism"
+    },
+    "beauty": {
+        "synonyms": ["beauty","charm","delicacy","elegance","grace","aesthetics","comeliness","cuteness","gorgeousness","handsomeness","sightliness"],
+        "antonyms": ["crudeness","inelegance","homeliness","ugliness","grotesqueness","hideousness","unattractiveness","unbecomingness","unloveliness","unsightliness"],
+        "category": "Universalism"
+    },
+    "justice": {
+        "synonyms": ["justice","impartiality","righteousness","virtue","uprightness"],
+        "antonyms": ["illegality","injustice","partiality","unethical","inequity","bias","nonobjectivity","unfair","unjust"],
+        "category": "Universalism"
+    },
+    "broad minded": {
+        "synonyms": ["broad-minded","nonconventional","nonorthodox","nontraditional","unconventional","unorthodox", "tolerant"],
+        "antonyms": ["conservative","conventional","hidebound","nonprogressive","orthodox","stodgy","biased","partisan","prejudiced","bigoted","intolerant","narrow-minded","unreceptive"],
+        "category": "Universalism"
+    },
+    "peace": {
+        "synonyms": ["peace","concord","calm","quiet","serenity","tranquillity","pacification","ease","comfort","consolation","relief","solace","repose","placidity"],
+        "antonyms": ["conflict","dissidence","strife","tumult","turmoil","unrest","upheaval","battle","combat","perturbation","strain","stress","tenseness","tension","consternation","discomfort","nervousness","fear","torment","dread","foreboding","incertitude","misgiving","suspense","uncertainty","agitation","anguish","anxiousness","apprehension","apprehensiveness","vexation"],
+        "category": "Universalism"
+    },
+    "sustainable": {
+        "synonyms": ["sustainable","viable","feasible","imperishable","livable"],
+        "antonyms": ["untenable","tiring","unendurable","temporary","unsupportable","unsustainable","drain"],
+        "category": "Universalism"
+    }
+}

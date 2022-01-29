@@ -1,0 +1,1 @@
+from src.text_preprocessing.preprocessor import preprocess

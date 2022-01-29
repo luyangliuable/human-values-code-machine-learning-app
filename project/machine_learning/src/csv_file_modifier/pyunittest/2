@@ -1,0 +1,18 @@
+import modifier
+import unittest
+
+sys.path.append('../../')
+import modifier
+
+class test_modifier(unittest.TestCase):
+
+    def setUp(self):
+        self.file_modifer = modifier()
+
+    def test_check_file_is_same_format(self):
+        filename = "a.testformat"
+        test_format = app.check_file_is_same_format(filename, '*.testformat')
+        test_format_false = app.check_file_is_same_format(filename, '*.randomformat')
+        self.assertTrue(test_format)
+        self.assertFalse(test_format_false)
+
