@@ -15,5 +15,5 @@ def create_task(info):
     print(info)
     file = info['file']
     result = machine_learning.background_file_labeler(file)
-    return True
+    return result, 200
 
