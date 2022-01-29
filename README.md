@@ -5,6 +5,10 @@
 
 - [Human Values Research: Swartz Values from code comments](#human-values-research-swartz-values-from-code-comments)
     - [-](#-)
+        - [Label single comment using text area](#label-single-comment-using-text-area)
+        - [Retrieve and predict all comment from git repository for human value mentions](#retrieve-and-predict-all-comment-from-git-repository-for-human-value-mentions)
+        - [Upload and predict CSV files by specifying name of column](#upload-and-predict-csv-files-by-specifying-name-of-column)
+        - [Requirements](#requirements)
     - [Machine learn](#machine-learn)
     - [Steps](#steps)
         - [Data Collection](#data-collection)
