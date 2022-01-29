@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 from celery import Celery
-from flask import Flask, render_template, request, send_file, flash, redirect, session, url_for, jsonify
+# from flask import Flask, render_template, request, send_file, flash, redirect, session, url_for, jsonify
 from matplotlib.ticker import MaxNLocator
 from collections import Counter
 from itertools import chain
@@ -16,17 +16,12 @@ from project.machine_learning.src import extractor
 matplotlib.use('Agg')
 
 
-ALLOWED_EXTENSIONS = {'csv'}
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = './project/client/static'
-app.debug = True
-print('Debug mode is currently', app.debug)
+# ALLOWED_EXTENSIONS = {'csv'}
+# app = Flask(__name__)
+# app.config['UPLOAD_FOLDER'] = './project/client/static'
+# app.debug = True
+# print('Debug mode is currently', app.debug)
 # toolbar = DebugToolbarExtension()
-
-
-@app.route('/', methods=["GET", "POST"])
-def home():
-  return render_template('main.html')
 
 model = model_trainer()
 model.open_model('model_gbdt.pkl')
@@ -38,34 +33,6 @@ def process(item):
   stuff_to_process = {'line': item}
   return process.process_comment(stuff_to_process)
 
-@app.route('/status/<task_id>')
-def taskstatus(task_id):
-    task = background_file_labeler.AsyncResult(task_id)
-    if task.state == 'PENDING':
-        response = {
-            'state': task.state,
-            'current': 0,
-            'total': 1,
-            'status': 'Pending...'
-        }
-    elif task.state != 'FAILURE':
-        response = {
-            'state': task.state,
-            'current': task.info.get('current', 0),
-            'total': task.info.get('total', 1),
-            'status': task.info.get('status', '')
-        }
-        if 'result' in task.info:
-            response['result'] = task.info['result']
-    else:
-        # something went wrong in the background job
-        response = {
-            'state': task.state,
-            'current': 1,
-            'total': 1,
-            'status': str(task.info),  # this is the exception raised
-        }
-    return jsonify(response)
 
 def plot_graph(counter, savedir):
   all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
@@ -85,9 +52,10 @@ def plot_graph(counter, savedir):
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
 
-  plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], file), bbox_inches='tight', pad_inches=.1)
+  filename = os.path.join(savedir, 'label_distribution.jpg')
+  plt.savefig(filename, bbox_inches='tight', pad_inches=.1)
 
-  return file
+  return filename
 
 
 def allowed_file(filename):
@@ -103,17 +71,6 @@ def background_file_labeler(file):
   processed_files = []
 
   download_folder = "./project/server/"
-
-  # if file.filename == '':
-  #   flash('No selected file')
-  #   return redirect(request.url)
-
-  # if file and allowed_file(file.filename):
-  # print('downloading', file.filename)
-  # file = secure_filename(file.filename)
-  # filename = file.filename
-  # filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-  # file.save(filepath)
   filename = file
   predicted_filename = 'predicted_file.csv'
   print("processing file: " + filename)
@@ -129,23 +86,21 @@ def background_file_labeler(file):
   tmp = data['prediction'].values
 
   values = []
-  print('Creating chart.')
   for item in tmp:
     if item == item:
       values = values + item.strip().split(' ')
 
-  image = plot_graph(Counter(values))
+  print('Creating chart.')
+  image = plot_graph(Counter(values), download_folder)
   print(image)
 
   res = ""
   for key, val in Counter(values).items():
     res = res + key + ': ' + str(val) + ' '
 
-  download = send_file(predicted_file)
+  return {'count': res, 'image': image, 'file': predicted_file }
+  # return render_template('main.html', result=res, image=image, download=predicted_file)
 
-  return render_template('main.html', result=res, image=image, download=download)
-
-@app.route('/file_labeler', methods=["GET", "POST"])
 def file_labeler():
   if 'file' not in request.files:
       print("no file part")
@@ -153,40 +108,30 @@ def file_labeler():
       return redirect(request.url)
   file = request.files.get('file')
   task = background_file_labeler(file)
-  return render_template('main.html', result='getting csv files...')
+  return True
 
-@app.route('/display/<filename>')
-def display_image(filename):
-	print('display_image filename: ' + filename)
-	return redirect(url_for('uploads', filename=filename), code=301)
+def label(comment: str):
+  comment = process(comment)[0]
+  print("predictin comment: ", comment)
+  item_to_predict = pd.DataFrame()
+  item_to_predict['new_line'] = [ comment ]
+  item_to_predict['language'] = ['python']
+  results, binarizer = model.predict(item_to_predict)
+  results = to_only_none(results)
+  results = binarizer.inverse_transform(results)
 
-@app.route('/label', methods=["GET", "POST"])
-def label():
-  result = ""
-  if len(request.form) > 0:
-    comment = request.form['comment']
-    # language = request.form['language']
-    comment = process(comment)[0]
-    print("predictin comment: ", comment)
-    item_to_predict = pd.DataFrame()
-    item_to_predict['new_line'] = [ comment ]
-    item_to_predict['language'] = ['python']
-    results, binarizer = model.predict(item_to_predict)
-    results = to_only_none(results)
-    results = binarizer.inverse_transform(results)
+  tmp = ""
+  for result in results[0]:
+    if tmp == "":
+      tmp = result
+    else:
+      tmp = tmp + ", " + result
 
-    tmp = ""
-    for result in results[0]:
-      if tmp == "":
-        tmp = result
-      else:
-        tmp = tmp + ", " + result
+  results = tmp
 
-    results = tmp
-
-    if results == 'none':
-      results = 'There is no value mention.'
-  return render_template('main.html', result=results)
+  if results == 'none':
+    results = 'There is no value mention.'
+  return results
 
 def to_only_none(input):
     res = []
@@ -200,7 +145,6 @@ def to_only_none(input):
             res.append(item)
     return np.array(res)
 
-@app.route('/repo', methods=["GET", "POST"])
 def repo():
   files = ""
   processed_files = []
@@ -229,9 +173,9 @@ def remove_files(files: list[str]) -> None:
   for file in files:
     os.remove(file)
 
-@app.route('/result')
-def reporter(result):
-    return str(result)
+# @app.route('/result')
+# def reporter(result):
+#     return str(result)
 
 if __name__ == '__main__':
   app.run(debug=True)
