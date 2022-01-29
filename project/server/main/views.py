@@ -9,15 +9,23 @@ upload_folder = './project/client/static/'
 
 @main_blueprint.route('/label', methods=["GET", "POST"])
 def label():
-    return machine_learning.label()
+
+    if len(request.form) > 0:
+        comment = request.form['comment']
+        res = machine_learning.label(comment)
+
+    return render_template("main.html", result=res)
 
 @main_blueprint.route("/file_labeler", methods=["POST"])
 def file_labeler():
-    return machine_learning.file_labeler()
+    machine_learning.file_labeler()
+    return render_template("main.html", result="getting result")
 
 @main_blueprint.route("/repo", methods=["POST"])
 def repo():
-    return machine_learning.repo()
+    res = machine_learning.repo()
+
+    return render_template("main.html", result=res)
 
 @main_blueprint.route("/", methods=["GET"])
 def home():
