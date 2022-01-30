@@ -80,6 +80,8 @@ def background_file_labeler(file):
   print("predicting", processed_files)
   predicted_file = model.predict_file(['new_line', 'language'], processed_files[0], download_folder)
 
+  processed_files = [os.path.join(download_folder, file) for file in processed_files]
+  print("removing", processed_files)
   remove_files(processed_files)
 
   print('interpreting', predicted_file)
