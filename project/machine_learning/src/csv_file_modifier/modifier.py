@@ -76,8 +76,8 @@ class csv_modifier():
     def get_fieldnames_from_csv_file(filename: str) -> List[T]:
         print(filename)
         directory_path = os.getcwd()
-        data = pd.read_csv(filename)
         print(directory_path)
+        data = pd.read_csv(os.path.join(directory_path, filename))
         print(data.iloc[0])
         print('data si', data.iloc[0])
         print(data.iloc[0])
