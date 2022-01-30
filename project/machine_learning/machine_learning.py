@@ -15,7 +15,7 @@ from project.machine_learning.src.preprocessor import preprocess as pre
 from werkzeug.utils import secure_filename
 from project.machine_learning.src import extractor
 matplotlib.use('Agg')
-download_folder = '/app/project/server/upload'
+download_folder = '/tmp/'
 
 
 model = model_trainer()

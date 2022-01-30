@@ -5,7 +5,7 @@ from celery.result import AsyncResult
 from project.server.tasks import create_task
 from project.machine_learning import machine_learning
 main_blueprint = Blueprint("main", __name__) #, static_folder='static')
-upload_folder = '/app/project/server/upload'
+upload_folder = '/tmp/'
 
 @main_blueprint.route('/label', methods=["GET", "POST"])
 def label():
