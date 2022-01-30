@@ -18,7 +18,7 @@ matplotlib.use('Agg')
 
 # ALLOWED_EXTENSIONS = {'csv'}
 # app = Flask(__name__)
-# app.config['UPLOAD_FOLDER'] = './project/client/static'
+# app.config['UPLOAD_FOLDER'] = './client/static'
 # app.debug = True
 # print('Debug mode is currently', app.debug)
 # toolbar = DebugToolbarExtension()
@@ -52,8 +52,8 @@ def plot_graph(counter, savedir):
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
 
-  filename = os.path.join(savedir, 'label_distribution.jpg')
-  plt.savefig(filename, bbox_inches='tight', pad_inches=.1)
+  filename = 'label_distribution.jpg'
+  plt.savefig(os.path.join(savedir, filename), bbox_inches='tight', pad_inches=.1)
 
   return filename
 
@@ -70,17 +70,19 @@ def background_file_labeler(file):
 
   processed_files = []
 
-  download_folder = "./project/server/"
+  download_folder = "project/client/static/"
   filename = file
   predicted_filename = 'predicted_file.csv'
   print("processing file: " + filename)
   process = pre(file, column, dictionary_file='word.pkl')
-  processed_files.append(process.create_new_processed_file())
+  processed_files.append(process.create_new_processed_file(download_folder))
+
   print("predicting", processed_files)
-  predicted_file = model.predict_file(['new_line', 'language'], processed_files[0])
+  predicted_file = model.predict_file(['new_line', 'language'], processed_files[0], download_folder)
 
   remove_files(processed_files)
-  print(predicted_file)
+
+  print('interpreting', predicted_file)
   data = pd.read_csv(os.path.join(download_folder, predicted_file ))
   print(data)
   tmp = data['prediction'].values
@@ -98,6 +100,7 @@ def background_file_labeler(file):
   for key, val in Counter(values).items():
     res = res + key + ': ' + str(val) + ' '
 
+  print(image)
   return {'count': res, 'image': image, 'file': predicted_file }
   # return render_template('main.html', result=res, image=image, download=predicted_file)
 

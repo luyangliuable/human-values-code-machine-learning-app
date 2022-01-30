@@ -1,12 +1,12 @@
 import nltk
+import os
 import csv
 import re
 import joblib
 import string
 import chardet
 import linecache
-import inspect
-import sys
+import pandas as pd
 # import git
 from typing import TypeVar, Generic, List, NewType
 from nltk.metrics.distance  import edit_distance
@@ -197,10 +197,11 @@ class preprocess():
         return word in stopwords
 
 
-    def process_comment(self, comment: dict) -> List[T]:
+    def process_comment(self, comment: str) -> List[T]:
         # source: https://stackoverflow.com/questions/15547409/how-to-get-rid-of-punctuation-using-nltk-tokenizer#15555162
 
-        line = comment[self.field_to_process]
+        print(comment)
+        line = comment
         line = self.replace_sym_with_space(line)
         line = self.split_word(line, is_list=False)
         line = self.process_out_noise2(line)
@@ -244,45 +245,65 @@ class preprocess():
         return new_trigram
 
 
-    def create_new_processed_file(self) -> str:
+    def create_new_processed_file(self, savedir) -> str:
         base_file_name = "preprocessed_comment_file"
 
-        newfile = self.modified_csv_file.create_csv_file(self.fieldname, base_file_name)
+        newfile = self.modified_csv_file.find_next_filename(base_file_name, savedir=savedir)
 
         file_size = self.modified_csv_file.get_number_of_lines_in_file(self.filename)
 
+        df = pd.read_csv(self.filename)
 
-        for i in range(2, file_size):
-            first_line = linecache.getline(self.filename, 1)
-            other_line = linecache.getline(self.filename, i)
-            f = StringIO(first_line + other_line)
-            line = csv.DictReader(f)
-            line = [single_line for single_line in line][0]
+        print(df)
 
-            line['original_comment'] = line[self.field_to_process]
+        # new_features = {'line': tokens, 'new_line': new_line, 'trigram': trigram, 'length': len(tokens)}
 
-            new_line, tokens = self.process_comment(line)
+        new_features = ['line', 'new_line', 'trigram', 'length']
 
-            trigram = self.create_trigram(line)
+        df['original_comment'] = df[self.field_to_process]
 
-            new_features = {'line': tokens, 'new_line': new_line, 'trigram': trigram, 'length': len(tokens)}
+        print(df['original_comment'])
 
-            for feature in new_features:
-                if feature not in [key for key in line] or feature == "new_line" or feature == 'line':
-                    line[feature] = new_features[feature]
+        df['new_line'] = df[self.field_to_process].apply(lambda x: self.process_comment(x)[0])
+
+        print(df['new_line'])
+
+        df.to_csv(os.path.join(savedir, newfile))
+
+        # for i in range(2, file_size):
+        #     first_line = linecache.getline(self.filename, 1)
+        #     other_line = linecache.getline(self.filename, i)
+
+        #     f = StringIO(first_line + other_line)
+
+        #     line = csv.DictReader(f)
+
+        #     line = [single_line for single_line in line][0]
+
+        #     line['original_comment'] = line[self.field_to_process]
+
+        #     new_line, tokens = self.process_comment(line)
+
+        #     trigram = self.create_trigram(line)
+
+        #     new_features = {'line': tokens, 'new_line': new_line, 'trigram': trigram, 'length': len(tokens)}
+
+        #     for feature in new_features:
+        #         if feature not in [key for key in line] or feature == "new_line" or feature == 'line':
+        #             line[feature] = new_features[feature]
 
 
-            line['new_line'] = new_features['new_line']
+        #     line['new_line'] = new_features['new_line']
 
-            row = []
-            columns = []
+        #     row = []
+        #     columns = []
 
-            for column_name in line:
-                columns.append(column_name)
-                row.append(line[column_name])
+        #     for column_name in line:
+        #         columns.append(column_name)
+        #         row.append(line[column_name])
 
-            if len(line[self.field_to_process]) >= 3:
-                self.modified_csv_file.append_to_csv_file(self.fieldname, row, newfile)
+        #     if len(line[self.field_to_process]) >= 3:
+        #         self.modified_csv_file.append_to_csv_file(self.fieldname, row, newfile)
 
 
         return newfile

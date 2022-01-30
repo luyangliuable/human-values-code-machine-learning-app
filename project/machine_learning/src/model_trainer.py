@@ -27,12 +27,13 @@ class model_trainer:
         self.count_vector = CountVectorizer(ngram_range=(1,3), max_df=1000, encoding='utf-8', analyzer='word')
 
 
-    def read_csv(self, csv_file: str=None) -> DataFrame:
+    def read_csv(self, csv_file: str=None, savedir: str='./') -> DataFrame:
         assert csv_file is not None, "No file to read"
         try:
-            print("opening file", csv_file)
+            file_loc = os.path.join( savedir, csv_file )
+            print("opening file", file_loc)
             self.csv_file = csv_file
-            self.data = pd.read_csv(csv_file)
+            self.data = pd.read_csv(file_loc)
         except FileNotFoundError:
             print("FileNotFoundError: such file", csv_file)
         return self.data
@@ -81,18 +82,18 @@ class model_trainer:
         return (self.model.predict(predictee)), self.binarizer
 
 
-    def predict_files(self, field_name_for_prediction: list, csv_file: list):
+    def predict_files(self, field_name_for_prediction: list, csv_file: list, savedir: str='./'):
         if len( csv_file ) != 0:
             data = pd.read_csv(csv_file[0])
             for i in range(1, len(csv_file)):
                 print("predicting", csv_file[i])
-                df = pd.read_csv(csv_file[i])
+                df = pd.read_csv(os.path.join(savedir, csv_file[i] ))
                 data = model_trainer.concat_pd(data, df)
             predictions = self.predict(data[field_name_for_prediction])
             print(predictions)
             data['prediction'] = predictions
             filename = "predicted_data.csv"
-            data.to_csv(filename)
+            data.to_csv(os.path.join(savedir, filename ))
         return filename
 
 
@@ -125,17 +126,18 @@ class model_trainer:
         return np.array(res)
 
 
-    def predict_file(self, field_name_for_prediction: str, csv_file: str=None):
+    def predict_file(self, field_name_for_prediction: str, csv_file: str=None, savedir: str='./'):
         if csv_file is None:
             csv_file = self.csv_file
-        self.read_csv(csv_file)
+
+        print('reading', csv_file, 'for prediction')
+        self.read_csv(csv_file, savedir)
         predictions, _ = self.predict(self.data[field_name_for_prediction])
         predictions = self.binarizer.inverse_transform(predictions)
         self.data['prediction'] = predictions
         self.data['prediction'] = self.data['prediction'].apply(lambda x: self.break_up_label(x))
 
-        path = './project/server'
         filename = "predicted_data_for_" + csv_file
-        print(os.path.join(path, filename))
-        self.data.to_csv(os.path.join(path, filename))
+        print(os.path.join(savedir, filename))
+        self.data.to_csv(os.path.join(savedir, filename))
         return filename
