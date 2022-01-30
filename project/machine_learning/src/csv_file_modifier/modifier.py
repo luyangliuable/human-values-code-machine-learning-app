@@ -77,6 +77,8 @@ class csv_modifier():
         print(filename)
         directory_path = os.getcwd()
         print(directory_path)
+        allfiles = os.listdir(directory_path)  
+        print(allfiles)
         data = pd.read_csv(os.path.join(directory_path, filename))
         print(data.iloc[0])
         print('data si', data.iloc[0])
