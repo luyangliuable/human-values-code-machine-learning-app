@@ -92,7 +92,7 @@ class model_trainer:
             predictions = self.predict(data[field_name_for_prediction])
             data['prediction'] = predictions
             filename = "predicted_data.csv"
-            data.to_csv(os.path.join(savedir, filename ))
+            data.to_csv(os.path.join(savedir, filename ), index=False)
         return filename
 
 
@@ -133,8 +133,7 @@ class model_trainer:
         predictions = self.binarizer.inverse_transform(predictions)
         self.data['prediction'] = predictions
         self.data['prediction'] = self.data['prediction'].apply(lambda x: self.break_up_label(x))
-
         filename = "predicted_data_for_" + csv_file
         print(os.path.join(savedir, filename))
-        self.data.to_csv(os.path.join(savedir, filename))
+        self.data.to_csv(os.path.join(savedir, filename), index=False)
         return filename

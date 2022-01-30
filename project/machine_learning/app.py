@@ -10,18 +10,11 @@ from matplotlib.ticker import MaxNLocator
 from collections import Counter
 from itertools import chain
 from project.machine_learning.src.model_trainer import model_trainer
+from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier
 from project.machine_learning.src.preprocessor import preprocess as pre
 from werkzeug.utils import secure_filename
 from project.machine_learning.src import extractor
 matplotlib.use('Agg')
-
-
-# ALLOWED_EXTENSIONS = {'csv'}
-# app = Flask(__name__)
-# app.config['UPLOAD_FOLDER'] = './client/static'
-# app.debug = True
-# print('Debug mode is currently', app.debug)
-# toolbar = DebugToolbarExtension()
 
 model = model_trainer()
 model.open_model('model_gbdt.pkl')
@@ -34,6 +27,7 @@ def process(comment):
 
 
 def plot_graph(counter, savedir):
+  modifier = csv_modifier()
   all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
   amount = []
   labels = []
@@ -51,7 +45,8 @@ def plot_graph(counter, savedir):
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
 
-  filename = 'label_distribution.jpg'
+  filename = modifier.find_next_filename('lb', savedir, 'jpg')
+
   plt.savefig(os.path.join(savedir, filename), bbox_inches='tight', pad_inches=.1)
 
   return filename
@@ -61,18 +56,15 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def background_file_labeler(file):
+def background_file_labeler(file, column: str):
   result = ""
-
-  print(file)
-  column = 'original_comment'
 
   processed_files = []
 
-  download_folder = "project/client/static/"
+  download_folder = "project/server/"
   filename = file
   predicted_filename = 'predicted_file.csv'
-  print("processing file: " + filename)
+  print("processing file: " + filename, 'in column', column)
   process = pre(file, column, dictionary_file='word.pkl')
   processed_files.append(process.create_new_processed_file(download_folder))
 
@@ -80,12 +72,12 @@ def background_file_labeler(file):
   predicted_file = model.predict_file(['new_line', 'language'], processed_files[0], download_folder)
 
   processed_files = [os.path.join(download_folder, file) for file in processed_files]
-  print("removing", processed_files)
-  remove_files(processed_files)
+
+  print("Skip: removing", processed_files)
+  # remove_files(processed_files)
 
   print('interpreting', predicted_file)
   data = pd.read_csv(os.path.join(download_folder, predicted_file ))
-  print(data)
   tmp = data['prediction'].values
 
   values = []
@@ -94,17 +86,15 @@ def background_file_labeler(file):
       values = values + item.strip().split(' ')
 
   print('Creating chart.')
-  image = plot_graph(Counter(values), download_folder)
-  print(image)
+  value_count = Counter(values)
+  image = plot_graph(value_count, download_folder)
 
   res = ""
-  for key, val in Counter(values).items():
+  for key, val in value_count.items():
     res = res + key + ': ' + str(val) + ' '
 
-  print(image)
-
   frontend_download = "/static/"
-  return {'count': res, 'image': os.path.join(frontend_download, image), 'file': os.path.join(frontend_download, predicted_file ) }
+  return {'count': res, 'image': image, 'file': predicted_file }
 
 def file_labeler():
   if 'file' not in request.files:

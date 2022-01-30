@@ -15,7 +15,8 @@ class csv_modifier():
 
     WILDCARD_IDENTIFIER = "*"
 
-    def __init__(self, filename: str) -> None:
+    def __init__(self, filename: str=None) -> None:
+        if filename != None:
             self.open_file(filename)
 
     def get_fieldname(self):
@@ -81,7 +82,7 @@ class csv_modifier():
 
 
     @classmethod
-    def search_file(cls, file_name: str, path: str) -> List[T]:
+    def search_file(cls, file_name: str, path: str, filetype: str='jpg') -> List[T]:
         """Search a root directory for a particular file
 
         Keyboard Arguments:
@@ -154,8 +155,7 @@ class csv_modifier():
         return save_loc
 
 
-    def find_next_filename(self, base_file_name, savedir: str='./'):
-        filetype = 'csv'
+    def find_next_filename(self, base_file_name, savedir: str='./', filetype: str='csv'):
         counter = 0
 
         while True:

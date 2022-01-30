@@ -258,12 +258,13 @@ class preprocess():
 
         new_features = ['line', 'new_line', 'trigram', 'length']
 
+        print(self.field_to_process)
         df['original_comment'] = df[self.field_to_process]
 
         df['new_line'] = df[self.field_to_process].apply(lambda x: self.process_comment(x)[0])
 
 
-        df.to_csv(os.path.join(savedir, newfile))
+        df.to_csv(os.path.join(savedir, newfile), index=False)
 
         # for i in range(2, file_size):
         #     first_line = linecache.getline(self.filename, 1)

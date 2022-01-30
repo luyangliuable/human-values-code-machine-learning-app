@@ -16,6 +16,7 @@ celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://lo
 def create_task(info):
     print(info)
     file = info['file']
-    result = machine_learning.background_file_labeler(file)
+    column = info['column']
+    result = machine_learning.background_file_labeler(file, column)
     return result, 200
 
