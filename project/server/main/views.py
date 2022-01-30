@@ -47,26 +47,23 @@ def getCSV(filename):
 
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
-    try:
-        file = request.files.get('file')
-        column = request.form.get('column')
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        print('downloading', file.filename)
-        filename = file.filename
-        file = request.files.get('file')
-        filepath = filename
-        print('downloading file', filename)
-        file.save(filepath)
-        print('download complete')
-        print('starting task to predict file')
-        info = { 'file': filepath, 'column': column }
-        task = create_task.delay(info)
-        print(task.id)
-        return jsonify({"task_id": task.id}), 200
-    except Exeception as e:
-        return jsonify({"task_id": task.id}), 400
+    file = request.files.get('file')
+    column = request.form.get('column')
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    print('downloading', file.filename)
+    filename = file.filename
+    file = request.files.get('file')
+    filepath = filename
+    print('downloading file', filename)
+    file.save(filepath)
+    print('download complete')
+    print('starting task to predict file')
+    info = { 'file': filepath, 'column': column }
+    task = create_task.delay(info)
+    print(task.id)
+    return jsonify({"task_id": task.id}), 200
 
 
 
