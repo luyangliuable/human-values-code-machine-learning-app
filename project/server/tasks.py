@@ -9,9 +9,7 @@ from project.machine_learning import machine_learning
 
 celery = Celery(__name__)
 celery.conf.broker_url = os.environ['REDIS_URL']
-# celery.conf.celery_task_serializer = 'json'
 celery.conf.result_backend = os.environ['REDIS_URL']
-celery.config['UPLOAD_FOLDER'] = 'project/server/upload'
 
 
 
