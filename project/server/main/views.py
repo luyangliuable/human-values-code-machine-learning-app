@@ -3,7 +3,7 @@ import os
 from flask import render_template, Blueprint, jsonify, request, Response, send_file, redirect, url_for
 from celery.result import AsyncResult
 from project.server.tasks import create_task
-from project.machine_learning import app as machine_learning
+from project.machine_learning import machine_learning
 main_blueprint = Blueprint("main", __name__) #, static_folder='static')
 upload_folder = './project/client/static/'
 
