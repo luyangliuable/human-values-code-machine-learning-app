@@ -20,7 +20,7 @@ def label():
 @main_blueprint.route("/file_labeler", methods=["POST"])
 def file_labeler():
     machine_learning.file_labeler()
-    return render_template("main.html", result="getting result")
+    return render_template("main.html", result="Getting result...")
 
 
 @main_blueprint.route("/repo", methods=["POST"])
@@ -40,9 +40,9 @@ def getCSV():
     return send_file('predicted_data_for_preprocessed_comment_file6.csv', as_attachment=True)
 
 
-@main_blueprint.route('/display/<filename>')
-def display_image(filename):
-	return redirect(url_for('static', filename=filename), code=301)
+# @main_blueprint.route('/display/<filename>')
+# def display_image(filename):
+# 	return redirect(url_for('static', filename=filename), code=301)
 
 
 @main_blueprint.route("/tasks", methods=["POST"])
