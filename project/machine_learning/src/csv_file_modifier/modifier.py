@@ -74,6 +74,7 @@ class csv_modifier():
     @staticmethod
     def get_fieldnames_from_csv_file(filename: str) -> List[T]:
         first_line = linecache.getline(filename, 1)
+        print(first_line)
         f = StringIO(first_line)
         line = csv.reader(f, delimiter = ',')
         surrounded_fields = [single_line for single_line in line]
