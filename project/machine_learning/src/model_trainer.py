@@ -90,7 +90,6 @@ class model_trainer:
                 df = pd.read_csv(os.path.join(savedir, csv_file[i] ))
                 data = model_trainer.concat_pd(data, df)
             predictions = self.predict(data[field_name_for_prediction])
-            print(predictions)
             data['prediction'] = predictions
             filename = "predicted_data.csv"
             data.to_csv(os.path.join(savedir, filename ))
@@ -107,8 +106,6 @@ class model_trainer:
         for each_label in row:
             print(each_label.strip())
             res = res + " " + each_label.strip()
-
-        print(res)
 
         return res
 

@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 from celery import Celery
-# from flask import Flask, render_template, request, send_file, flash, redirect, session, url_for, jsonify
+from flask import send_file, jsonify
 from matplotlib.ticker import MaxNLocator
 from collections import Counter
 from itertools import chain
@@ -28,10 +28,9 @@ model.open_model('model_gbdt.pkl')
 model.open_vocabulary('vectorizer.pkl')
 model.open_binarizer('binarizer.pkl')
 
-def process(item):
+def process(comment):
   process = pre(dictionary_file='word.pkl')
-  stuff_to_process = {'line': item}
-  return process.process_comment(stuff_to_process)
+  return process.process_comment(comment)
 
 
 def plot_graph(counter, savedir):
@@ -103,8 +102,9 @@ def background_file_labeler(file):
     res = res + key + ': ' + str(val) + ' '
 
   print(image)
-  return {'count': res, 'image': image, 'file': predicted_file }
-  # return render_template('main.html', result=res, image=image, download=predicted_file)
+
+  frontend_download = "/static/"
+  return {'count': res, 'image': os.path.join(frontend_download, image), 'file': os.path.join(frontend_download, predicted_file ) }
 
 def file_labeler():
   if 'file' not in request.files:
