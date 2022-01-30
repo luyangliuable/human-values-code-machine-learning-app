@@ -2,6 +2,7 @@ import nltk
 import csv
 import linecache
 import chardet
+import pandas as pd
 import os
 import inspect
 import sys
@@ -73,8 +74,11 @@ class csv_modifier():
 
     @staticmethod
     def get_fieldnames_from_csv_file(filename: str) -> List[T]:
+        data = pd.read_csv(filename)
+        print(data.iloc[0])
+        print('data si', data.iloc[0])
+        print(data.iloc[0])
         first_line = linecache.getline(filename, 1)
-        print(first_line)
         f = StringIO(first_line)
         line = csv.reader(f, delimiter = ',')
         surrounded_fields = [single_line for single_line in line]
