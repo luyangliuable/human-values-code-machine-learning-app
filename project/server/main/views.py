@@ -5,7 +5,7 @@ from celery.result import AsyncResult
 from project.server.tasks import create_task
 from project.machine_learning import machine_learning
 main_blueprint = Blueprint("main", __name__) #, static_folder='static')
-upload_folder = './project/client/static/'
+upload_folder = 'project/server/upload'
 
 @main_blueprint.route('/label', methods=["GET", "POST"])
 def label():
@@ -57,7 +57,8 @@ def run_task():
     file = request.files.get('file')
     filepath = filename
     print('downloading file', filename)
-    file.save(filepath)
+    print(os.path.join(upload_folder, filepath ))
+    file.save(os.path.join(upload_folder, filepath ))
     print('download complete')
     print('starting task to predict file')
     info = { 'file': filepath, 'column': column }

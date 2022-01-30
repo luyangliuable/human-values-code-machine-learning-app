@@ -15,6 +15,7 @@ from project.machine_learning.src.preprocessor import preprocess as pre
 from werkzeug.utils import secure_filename
 from project.machine_learning.src import extractor
 matplotlib.use('Agg')
+download_folder = "project/server/upload"
 
 model = model_trainer()
 model.open_model('model_gbdt.pkl')
@@ -61,7 +62,6 @@ def background_file_labeler(file, column: str):
 
   processed_files = []
 
-  download_folder = "project/server/"
   filename = file
   predicted_filename = 'predicted_file.csv'
   print("processing file: " + filename, 'in column', column)

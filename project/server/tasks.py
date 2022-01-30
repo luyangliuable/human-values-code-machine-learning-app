@@ -11,6 +11,8 @@ celery = Celery(__name__)
 celery.conf.broker_url = os.environ['REDIS_URL']
 # celery.conf.celery_task_serializer = 'json'
 celery.conf.result_backend = os.environ['REDIS_URL']
+celery.config['UPLOAD_FOLDER'] = 'project/server/upload'
+
 
 
 @celery.task(name="create_task")
