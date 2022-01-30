@@ -142,26 +142,31 @@ class csv_modifier():
         return False
 
 
-    def create_csv_file(self, fieldnames: List[T], base_file_name: str, filetype: str="csv") -> str:
+    def create_csv_file(self, fieldnames: List[T], base_file_name: str, savedir: str="./") -> str:
+        save_loc = self.find_next_filename(base_file_name, savedir)
 
+        with open(save_loc, "w") as f:
+            if filetype == "csv":
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                f.close()
+
+        return save_loc
+
+
+    def find_next_filename(self, base_file_name, savedir: str='./'):
+        filetype = 'csv'
         counter = 0
 
         while True:
-
             filename = base_file_name + str( counter ) + "." + filetype
 
-            if len(self.search_file(filename, './')) == 0:
+            save_loc = os.path.join(savedir, filename)
 
-                with open(filename, "w") as f:
-                    if filetype == "csv":
-                        writer = csv.DictWriter(f, fieldnames=fieldnames)
-                        writer.writeheader()
-                        f.close()
-                    break
+            if len(self.search_file(filename, savedir)) == 0:
+                return filename
 
             counter += 1
-
-        return filename
 
 
     def open_file(self, csv_file: str) -> None:

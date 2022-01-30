@@ -8,7 +8,6 @@
  })();
 
 
-
  function handleClick(event) {
      event.preventDefault();
 
@@ -56,7 +55,15 @@ function getStatus(taskID) {
         }).catch(err => console.log(err));
 }
 
+ function download() {
+     fetch('/getCSV', {
+         method: 'GET',
+     })
+         .then(response => { console.log( response.json() ) })
+         .catch(err => console.error(err));
+ }
 </Script>
+
 <!-- <head>
      <link rel="stylesheet" type="text/css" href="style/style.css" />
      </head> -->
@@ -87,11 +94,16 @@ function getStatus(taskID) {
 
         <div id="results">
             <!-- {% if result != 'none' %} -->
-            {{result}}
+            <p> {{result}} </p>
             <!-- {% endif %} -->
-            <img id="images" src="/project/server/label_distribution.jpg" />
-        </div>
 
+        </div>
+            <br />
+            <br />
+            <button type="button" onclick="download()" id="btn" value="Download" class="button">Download</button>
+            <br />
+            <br />
+            <img id="images" src="{{ url_for('main.display_image', filename='label_distribution.jpg')  }}" />
     </form>
 
 

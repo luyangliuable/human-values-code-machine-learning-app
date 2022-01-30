@@ -1,10 +1,10 @@
 # project/server/main/views.py
 import os
-from flask import render_template, Blueprint, jsonify, request, Response
+from flask import render_template, Blueprint, jsonify, request, Response, send_file, redirect, url_for
 from celery.result import AsyncResult
 from project.server.tasks import create_task
 from project.machine_learning import app as machine_learning
-main_blueprint = Blueprint("main", __name__,)
+main_blueprint = Blueprint("main", __name__, static_folder='static')
 upload_folder = './project/client/static/'
 
 @main_blueprint.route('/label', methods=["GET", "POST"])
@@ -16,11 +16,13 @@ def label():
 
     return render_template("main.html", result=res)
 
+
 @main_blueprint.route("/file_labeler", methods=["POST"])
 def file_labeler():
 
     machine_learning.file_labeler()
     return render_template("main.html", result="getting result")
+
 
 @main_blueprint.route("/repo", methods=["POST"])
 def repo():
@@ -28,9 +30,20 @@ def repo():
 
     return render_template("main.html", result=res)
 
+
 @main_blueprint.route("/", methods=["GET"])
 def home():
     return render_template("main.html", result='')
+
+
+@main_blueprint.route("/getCSV")
+def getCSV():
+    return send_file('predicted_data_for_preprocessed_comment_file6.csv', as_attachment=True)
+
+
+@main_blueprint.route('/display/<filename>')
+def display_image(filename):
+	return redirect(url_for('static', filename=filename), code=301)
 
 
 @main_blueprint.route("/tasks", methods=["POST"])
@@ -42,16 +55,14 @@ def run_task():
     print('downloading', file.filename)
     filename = file.filename
     file = request.files.get('file')
-    filepath =  upload_folder + filename
+    filepath = filename
     print('downloading file', filename)
     file.save(filepath)
     print('download complete')
     print('starting task to predict file')
     info = { 'file': filepath }
-    print(info)
     task = create_task.delay(info)
     print(task.id)
-    # return Response({"task_id": task.id}, status=201)
     return jsonify({"task_id": task.id}), 200
 
 
