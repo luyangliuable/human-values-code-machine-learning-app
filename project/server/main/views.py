@@ -20,10 +20,7 @@ main_blueprint = Blueprint("main", __name__) #, static_folder='static')
 matplotlib.use('Agg')
 
 # celery.conf.result_backend = os.environ['REDIS_URL']
-r = Redis(
-    host='ec2-35-169-199-184.compute-1.amazonaws.com',
-    port='25330',
-    password='p5084188f1e63e186f7613091119b0d49602e1700681dc2f6fac385d3b637b1e3')
+r = Redis.from_url(url='redis://:p5084188f1e63e186f7613091119b0d49602e1700681dc2f6fac385d3b637b1e3@ec2-35-169-199-184.compute-1.amazonaws.com:25330')
 
 
 def store_data(request, column: str):
