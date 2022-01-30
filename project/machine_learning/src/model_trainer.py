@@ -90,10 +90,9 @@ class model_trainer:
                 df = pd.read_csv(os.path.join(savedir, csv_file[i] ))
                 data = model_trainer.concat_pd(data, df)
             predictions = self.predict(data[field_name_for_prediction])
-            print(predictions)
             data['prediction'] = predictions
             filename = "predicted_data.csv"
-            data.to_csv(os.path.join(savedir, filename ))
+            data.to_csv(os.path.join(savedir, filename ), index=False)
         return filename
 
 
@@ -107,8 +106,6 @@ class model_trainer:
         for each_label in row:
             print(each_label.strip())
             res = res + " " + each_label.strip()
-
-        print(res)
 
         return res
 
@@ -136,8 +133,7 @@ class model_trainer:
         predictions = self.binarizer.inverse_transform(predictions)
         self.data['prediction'] = predictions
         self.data['prediction'] = self.data['prediction'].apply(lambda x: self.break_up_label(x))
-
         filename = "predicted_data_for_" + csv_file
         print(os.path.join(savedir, filename))
-        self.data.to_csv(os.path.join(savedir, filename))
+        self.data.to_csv(os.path.join(savedir, filename), index=False)
         return filename

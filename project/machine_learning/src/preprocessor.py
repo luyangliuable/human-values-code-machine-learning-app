@@ -200,7 +200,6 @@ class preprocess():
     def process_comment(self, comment: str) -> List[T]:
         # source: https://stackoverflow.com/questions/15547409/how-to-get-rid-of-punctuation-using-nltk-tokenizer#15555162
 
-        print(comment)
         line = comment
         line = self.replace_sym_with_space(line)
         line = self.split_word(line, is_list=False)
@@ -254,21 +253,18 @@ class preprocess():
 
         df = pd.read_csv(self.filename)
 
-        print(df)
 
         # new_features = {'line': tokens, 'new_line': new_line, 'trigram': trigram, 'length': len(tokens)}
 
         new_features = ['line', 'new_line', 'trigram', 'length']
 
+        print(self.field_to_process)
         df['original_comment'] = df[self.field_to_process]
-
-        print(df['original_comment'])
 
         df['new_line'] = df[self.field_to_process].apply(lambda x: self.process_comment(x)[0])
 
-        print(df['new_line'])
 
-        df.to_csv(os.path.join(savedir, newfile))
+        df.to_csv(os.path.join(savedir, newfile), index=False)
 
         # for i in range(2, file_size):
         #     first_line = linecache.getline(self.filename, 1)
