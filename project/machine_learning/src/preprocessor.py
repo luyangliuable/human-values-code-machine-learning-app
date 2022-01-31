@@ -38,8 +38,6 @@ class preprocess():
         print(dictionary_file)
         if dictionary_file !=  None:
             self.correct_words = joblib.load(dictionary_file)
-        if csv_file is not None:
-            self.open_csv_file(csv_file)
 
     def set_field_to_process(self, field_to_process: str='line'):
         self.field_to_process = field_to_process
@@ -217,6 +215,7 @@ class preprocess():
                 else:
                     res = word
                 res2.append(word)
+
 
         return res, res2
 

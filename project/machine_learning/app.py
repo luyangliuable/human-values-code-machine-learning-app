@@ -1,5 +1,8 @@
 import os
 import time
+from redis import Redis
+import pickle
+import zlib
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -21,9 +24,17 @@ model.open_model('model_gbdt.pkl')
 model.open_vocabulary('vectorizer.pkl')
 model.open_binarizer('binarizer.pkl')
 
+r = Redis("machine_learning_app_redis_1", 6379)
+
 def process(comment):
   process = pre(dictionary_file='word.pkl')
   return process.process_comment(comment)
+
+
+def store_df(data, name) -> bool:
+    r.set(name, zlib.compress( pickle.dumps(data)))
+    print('sucessfully stored')
+    return True
 
 
 def plot_graph(counter, savedir):
@@ -56,6 +67,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def background_file_labeler(file, column: str):
   result = ""
 
@@ -63,38 +75,51 @@ def background_file_labeler(file, column: str):
 
   download_folder = "project/server/"
   filename = file
-  predicted_filename = 'predicted_file.csv'
+  data = pickle.loads(zlib.decompress(r.get(column)))
   print("processing file: " + filename, 'in column', column)
   process = pre(file, column, dictionary_file='word.pkl')
-  processed_files.append(process.create_new_processed_file(download_folder))
 
-  print("predicting", processed_files)
-  predicted_file = model.predict_file(['new_line', 'language'], processed_files[0], download_folder)
+  data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
 
-  processed_files = [os.path.join(download_folder, file) for file in processed_files]
+  print("predicting", filename)
 
-  print("Skip: removing", processed_files)
-  # remove_files(processed_files)
+  prediction, binarizer = model.predict(data[['new_line', 'language']])
 
-  print('interpreting', predicted_file)
-  data = pd.read_csv(os.path.join(download_folder, predicted_file ))
+
+  prediction = binarizer.inverse_transform(prediction)
+
+  print(prediction)
+
+  data['prediction'] = prediction
+
   tmp = data['prediction'].values
+
+  print('tmp is', tmp)
 
   values = []
   for item in tmp:
-    if item == item:
-      values = values + item.strip().split(' ')
+    print(values)
+    for val in item:
+      print(val)
+      if val == val:
+        values.append(val)
+
 
   print('Creating chart.')
+
+  dataname = 'completed'
+
+  store_df(data, dataname)
+
   value_count = Counter(values)
-  image = plot_graph(value_count, download_folder)
+
+  # image = plot_graph(value_count, download_folder)
 
   res = ""
   for key, val in value_count.items():
     res = res + key + ': ' + str(val) + ' '
 
-  frontend_download = "/static/"
-  return {'count': res, 'image': image, 'file': predicted_file }
+  return {"data": dataname, "count": res}
 
 def file_labeler():
   if 'file' not in request.files:
@@ -151,7 +176,7 @@ def repo():
       column = 'line'
       for file in files:
         print("processing file: " + file)
-        process = pre(file, column)
+        process = pre(field_to_process=column)
         processed_files.append(process.create_new_processed_file())
 
       remove_files(files)

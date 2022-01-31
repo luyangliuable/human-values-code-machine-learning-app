@@ -55,9 +55,9 @@ function getStatus(taskID) {
                 result_display.src = res.task_result[0]['image']
                 $('#images, #btn').fadeIn(200);
                 console.log("/getCSV/" + res.task_result[0]['image'])
-                $('#images').attr('src', "/getCSV/" + res.task_result[0]['image']);
+                $('#images').attr('src', "/getChart/" + res.task_result[0]['data']);
                 $('#btn').click(function() {
-                    window.location = "/getCSV/" + res.task_result[0]['file']
+                    window.location = "/getCSV/" + res.task_result[0]['data']
                 });
 
                 return true
