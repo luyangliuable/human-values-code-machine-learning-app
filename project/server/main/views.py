@@ -109,9 +109,11 @@ def getCSV(data):
     data = pickle.loads(zlib.decompress(r.get(data)))
     with tempfile.TemporaryDirectory() as tmpdirname:
         data.to_csv(os.path.join( tmpdirname, 'file.csv' ))
-    print('csv file successfully created', tmpdirname)
+        print('csv file successfully created', tmpdirname)
 
-    return send_file(os.path.join( tmpdirname, 'file.csv' )), 200
+        return send_file(os.path.join( tmpdirname, 'file.csv' )), 200
+
+    return 500
 
 
 # @main_blueprint.route('/display/<filename>')
