@@ -19,7 +19,8 @@ main_blueprint = Blueprint("main", __name__) #, static_folder='static')
 
 matplotlib.use('Agg')
 
-r = Redis("machine_learning_app_redis_1", 6379)
+# celery.conf.result_backend = os.environ['REDIS_URL']
+r = Redis("REDIS_URL")
 
 
 def store_data(request, column: str):

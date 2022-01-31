@@ -24,7 +24,8 @@ model.open_model('model_gbdt.pkl')
 model.open_vocabulary('vectorizer.pkl')
 model.open_binarizer('binarizer.pkl')
 
-r = Redis("machine_learning_app_redis_1", 6379)
+# r = Redis("machine_learning_app_redis_1", 6379)
+r = Redis("REDIS_URL")
 
 def process(comment):
   process = pre(dictionary_file='word.pkl')
