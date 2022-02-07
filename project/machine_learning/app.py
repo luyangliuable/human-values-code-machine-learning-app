@@ -182,9 +182,9 @@ def to_only_none(input):
 def repo(repo_url, branch):
     print("attempting to get from repo")
     repo = repo_url
+    column = 'line'
     with tempfile.TemporaryDirectory() as tmpdirname:
       files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
-      column = 'line'
       data = pd.DataFrame()
       for file in files:
         print(file)
@@ -195,8 +195,8 @@ def repo(repo_url, branch):
       print(data.shape)
       print(data.head)
 
-    process = pre(file, column, dictionary_file='word.pkl')
-    data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
+    processor = pre(file, column, dictionary_file='word.pkl')
+    data['new_line'] = data[column].apply(lambda x: processor.process_comment(x)[0])
 
     print("predicting")
     prediction, binarizer = model.predict(data[['new_line', 'language']])
