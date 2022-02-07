@@ -32,8 +32,6 @@ class comment_database:
 
 
     def remove_duplicates_in_database(self):
-        print(self.og_fieldnames[0])
-        print(self.og_fieldnames[1])
         self.execute("""
             delete from """ + self.tablename + """
             where rowid not in (select min(rowid)
@@ -124,6 +122,7 @@ class comment_database:
             f = StringIO(first_line + other_line)
             line = csv.DictReader(f)
             line = [single_line for single_line in line][0]
+            print(line)
             for key in line:
                 # if isinstance(line, str):
                 line[key] = line[key].replace("'","''")
