@@ -99,6 +99,14 @@ def background_file_labeler(file, column: str):
 
   print('tmp is', tmp)
 
+  values = []
+  for item in tmp:
+    for val in item:
+      if val == val:
+        values.append(val)
+
+  print('Creating chart.')
+
   dataname = 'completed'
 
   print(data.head)
