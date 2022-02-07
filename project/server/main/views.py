@@ -124,7 +124,8 @@ def getCSV(data):
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
     type = request.form.get('type')
-    if type == 'label'
+    print(type)
+    if type == 'label':
         file = request.files.get('file')
         column = request.form.get('column')
         if file.filename == '':

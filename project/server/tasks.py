@@ -14,9 +14,10 @@ celery.conf.result_backend = os.environ['REDIS_URL']
 
 @celery.task(name="create_task")
 def create_task(info):
-    print(info)
-    file = info['file']
-    column = info['column']
-    result = machine_learning.background_file_labeler(file, column)
-    return result, 200
+    type = info['type']
+    if type == 'label':
+        file = info['file']
+        column = info['column']
+        result = machine_learning.background_file_labeler(file, column)
+        return result, 200
 

@@ -18,8 +18,8 @@
 
      var form_data = new FormData();
      form_data.append('file', $('#a').prop('files')[0]);
-     form_data.append('column', $('#column').val()); <!--  -->
      form_data.append('type', 'label');
+     form_data.append('column', $('#column').val()); <!--  -->
 
      fetch('/tasks', {
          method: 'POST',
