@@ -530,7 +530,7 @@ def create_comment_file(language) -> str:
 
     fieldnames = ['line', 'location', 'language']
     with tempfile.TemporaryDirectory() as tmpdirname:
-        filename = find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
+        filename = modifier.find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
         print("creating new comment file", filename, "for language", language['language'])
         res = os.path.join(tmpdirname, filename)
         f = open(res, "a")
