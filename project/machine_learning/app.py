@@ -191,8 +191,8 @@ def repo(repo_url, branch):
         comment_db = cdb(file)
         comment_db.remove_duplicates_in_database()
         removed_dup_file = comment_db.export_table_to_csv(tmpdirname)
-        print(removed_dup_file)
         new_data = pd.read_csv(removed_dup_file)
+        print(new_data.head)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
 

@@ -32,6 +32,8 @@ class comment_database:
 
 
     def remove_duplicates_in_database(self):
+        print(self.og_fieldnames[0])
+        print(self.og_fieldnames[1])
         self.execute("""
             delete from """ + self.tablename + """
             where rowid not in (select min(rowid)
