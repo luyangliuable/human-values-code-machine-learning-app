@@ -123,20 +123,22 @@ def getCSV(data):
 
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
-    file = request.files.get('file')
-    column = request.form.get('column')
-    if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
-    filename = file.filename
-    print('downloading file', column, filename)
-    data_key= store_data(request, column)
-    print('download complete')
-    print('starting task to predict file')
-    info = { 'file': data_key, 'column': column }
-    task = create_task.delay(info)
-    print(task.id)
-    return jsonify({"task_id": task.id}), 200
+    type = request.form.get('type')
+    if type == 'label'
+        file = request.files.get('file')
+        column = request.form.get('column')
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        filename = file.filename
+        print('downloading file', column, filename)
+        data_key= store_data(request, column)
+        print('download complete')
+        print('starting task to predict file')
+        info = { 'file': data_key, 'column': column }
+        task = create_task.delay(info)
+        print(task.id)
+        return jsonify({"task_id": task.id}), 200
 
 
 
