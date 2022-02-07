@@ -50,9 +50,8 @@ def plot_graph(counter, savedir):
   print('counter is ', counter)
 
   labels, amount = util.label_counter(counter)
-
-  print(labels)
-  print(amount)
+  print("labels are", labels)
+  print("label amounts are", amount)
 
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
@@ -89,7 +88,6 @@ def background_file_labeler(file, column: str):
 
   prediction, binarizer = model.predict(data[['new_line', 'language']])
 
-
   prediction = binarizer.inverse_transform(prediction)
 
   print(prediction)
@@ -105,7 +103,6 @@ def background_file_labeler(file, column: str):
     for val in item:
       if val == val:
         values.append(val)
-
 
   print('Creating chart.')
 
