@@ -19,6 +19,7 @@
      var form_data = new FormData();
      form_data.append('file', $('#a').prop('files')[0]);
      form_data.append('column', $('#column').val()); <!--  -->
+     form_data.append('type', 'label');
 
      fetch('/tasks', {
          method: 'POST',
@@ -27,6 +28,26 @@
              .then(response => response.json())
              .then(data => getStatus(data.task_id))
              .catch(err => console.error(err));
+ }
+
+
+ function handleClick2(event) {
+     event.preventDefault();
+
+     $('#images, #btn').fadeOut(200);
+
+     var form_data = new FormData();
+     form_data.append('repo_url', $('#a').prop('files')[0]);
+     form_data.append('branch', $('#column').val()); <!--  -->
+     form_data.append('type', 'repo');
+
+     fetch('/tasks', {
+         method: 'POST',
+         body: form_data,
+     })
+         .then(response => response.json())
+         .then(data => getStatus(data.task_id))
+         .catch(err => console.error(err));
  }
 
 
@@ -90,12 +111,12 @@ function getStatus(taskID) {
     <!------------------------------------------------------------------------>
     <!--                          getting from repo                         -->
     <!------------------------------------------------------------------------>
-    <form action = "{{url_for('main.repo')}}" method="POST">
+    <form name="repo_getter" method="POST">
 
         <input type='text' name="repo_url" placeholder="repo url" />
         <input type='text' name="branch" placeholder="branchname" />
 
-        <input class="button" type="submit" value="Retrieve" />
+        <input class="button" onclick="handleClick2(event)" value="Retrieve" />
 
     </form>
 

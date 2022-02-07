@@ -9,10 +9,7 @@ import sys
 sys.path.append('../../')
 import project.machine_learning.src.extractor as app
 
-
-
 T = TypeVar("T")
-
 
 class comment_database:
     tablename = 'comments'
@@ -108,11 +105,13 @@ class comment_database:
             line = [single_line for single_line in line][0]
             return line
 
+
     def get_number_of_lines_in_file(self, file: str):
         with open(file, 'rb') as fp:
             c_generator = comment_database._count_generator(fp.raw.read)
             count = sum(buffer.count(b'\n') for buffer in c_generator)
             return count + 1
+
 
     def import_comments_from_csv_file(self, filename: str) -> None:
         file_size = self.get_number_of_lines_in_file(filename)
@@ -132,6 +131,7 @@ class comment_database:
                 list_of_values.append(line[key])
 
             self.insert_line(list_of_values)
+
 
     def remove_duplicate_in_list_of_files(self, list_of_files: List[T]) -> None:
         for file in list_of_files:
@@ -195,6 +195,7 @@ class comment_database:
         values_to_be_inserted = self.turn_list_into_fields(values, False)
         query = """insert into """ + self.tablename + """ """ + self.fieldname + """ VALUES """ + values_to_be_inserted
         self.execute(query)
+
 
     def execute(self, query: str) -> None:
         self.cur.execute(query)

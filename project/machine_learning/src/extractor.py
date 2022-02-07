@@ -1,5 +1,5 @@
 import os
-# import git
+import git
 import csv
 import shutil
 import tempfile
