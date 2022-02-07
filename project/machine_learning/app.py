@@ -41,7 +41,9 @@ def store_df(data, name) -> bool:
 
 def plot_graph(counter, savedir):
   modifier = csv_modifier()
+
   all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
+
   amount = []
   labels = []
 
@@ -53,24 +55,19 @@ def plot_graph(counter, savedir):
     labels.append(key)
     amount.append(item)
 
+  # for l in all_labels:
+  #   if l not in labels:
+  #     labels.append(l)
+  #     amount.append(0)
 
-  for l in all_labels:
-    if l not in labels:
-      labels.append(l)
-      amount.append(0)
-
-    print(labels)
-    print(amount)
-
+  print(labels)
+  print(amount)
 
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
-
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
-
   filename = modifier.find_next_filename('lb', savedir, 'jpg')
-
   plt.savefig(os.path.join(savedir, filename), bbox_inches='tight', pad_inches=.1)
 
   return filename
