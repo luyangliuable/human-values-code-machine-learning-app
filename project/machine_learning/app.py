@@ -186,9 +186,6 @@ def repo(repo_url, branch):
       files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
       data = pd.DataFrame()
       for file in files:
-        # comment_db = cdb(file)
-        # comment_db.remove_duplicates_in_database()
-        # removed_dup_file = comment_db.export_table_to_csv(tmpdirname)
         new_data = pd.read_csv(file)
         new_data = new_data.drop_duplicates(subset=['line'])
         new_data = new_data.drop_duplicates(subset=['location'])
