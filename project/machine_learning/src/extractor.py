@@ -533,9 +533,9 @@ def create_comment_file(language) -> str:
         filename = modifier.find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
         print("creating new comment file", filename, "for language", language['language'])
         res = os.path.join(tmpdirname, filename)
-        f = open(res, "a")
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
+        with open(res, "w", encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
         f.close()
 
     return res
@@ -614,6 +614,5 @@ def write_comment_file(lines_of_comment: List[T], target: str):
 
     with open(target, "a", encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
-        # writer.writeheader()
         writer.writerows(lines_of_comment)
     file.close()
