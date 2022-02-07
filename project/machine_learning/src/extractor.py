@@ -372,8 +372,9 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
                 previous_line_is_comment = True
                 leng = len(re.findall(r'\w+', comment['line']))
                 if leng <= 100:
-                    print(leng)
                     res.append(comment)
+                    if leng >= 50:
+                        print(comment['line'])
 
     if next_line_is_comment:
         multiple_singleline_comment += nextline_singleline_comment + " "
@@ -384,6 +385,8 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
         leng = len(re.findall(r'\w+', comment['line']))
         if leng <= 100:
             res.append(comment)
+            if leng >= 50:
+                print(comment['line'])
         next_line_is_comment = False
         multiple_singleline_comment = ""
 
