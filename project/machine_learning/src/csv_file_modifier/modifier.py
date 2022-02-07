@@ -113,10 +113,9 @@ class csv_modifier():
 
                 if "file" in locals():
                     found = file.find(file_name)
+                    if found != -1:
+                        break
                 else:
-                    print(os.path.join(path, file_name))
-                    res.append(os.path.join(path, file_name))
-                if found != -1:
                     break
         return res
 
