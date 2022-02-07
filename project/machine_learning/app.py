@@ -183,13 +183,15 @@ def repo(repo_url, branch):
     repo = repo_url
     files = extractor.get_comment_from_repo_using_all_languages(repo , branch, './')
     column = 'line'
-    process = pre(file, column, dictionary_file='word.pkl')
     data = pd.DataFrame()
     for file in files:
+      print(file)
+      print(data)
       new_data = pd.read_csv(file)
       pd.concat([data, new_data], axis=1)
       print("processing file: " + file)
 
+    print(data)
     data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
 
     print("predicting")
