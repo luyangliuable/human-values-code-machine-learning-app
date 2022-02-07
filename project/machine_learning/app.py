@@ -17,7 +17,7 @@ from itertools import chain
 from project.machine_learning.src.model_trainer import model_trainer
 from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier
 from project.machine_learning.src.preprocessor import preprocess as pre
-from src import project.machine_learning.src.duplicate_remover.comment_database as cdb
+from project.machine_learning.src.duplicate_remover import comment_database as cdb
 from werkzeug.utils import secure_filename
 from project.machine_learning.src import extractor
 matplotlib.use('Agg')
