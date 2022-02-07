@@ -139,7 +139,7 @@ class preprocess():
 
 
     def replace_sym_with_space(self, sentence: str) -> str:
-        symbols = ".()_-,\"'"
+        symbols = ".()_-,\"':{}[]/\\+!?"
         rep = dict((re.escape(k), " ") for k in symbols)
         pattern = re.compile("|".join(rep.keys()))
         text = pattern.sub(lambda m: rep[re.escape(m.group(0))], sentence)
@@ -218,7 +218,7 @@ class preprocess():
                         res = res + " " + word
                     else:
                         res = word
-                    res2.append(word)
+                    # res2.append(word)
 
         return res, res2
 

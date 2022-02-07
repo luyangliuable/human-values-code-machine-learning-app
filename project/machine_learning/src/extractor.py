@@ -317,6 +317,7 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
     languages -- the language the lines are written in
     """
 
+    max_comment_length = 100
     res = []
     multiline_comment = False
     next_line_is_comment = False
@@ -371,9 +372,9 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
                 assert comment.__class__ is dict, "class of comment must be stored in dictionary"
                 previous_line_is_comment = True
                 leng = len(re.findall(r'\w+', comment['line']))
-                if leng <= 100:
+                if leng <= max_comment_length:
                     res.append(comment)
-                    if leng >= 50:
+                    if leng >= 70:
                         print(comment['line'])
 
     if next_line_is_comment:
@@ -383,9 +384,9 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
         comment['line'] = remove_starting_whitespace(comment['line'])
         assert comment['line'][0] != " ", "no starting whitespace allowed"
         leng = len(re.findall(r'\w+', comment['line']))
-        if leng <= 100:
+        if leng <= max_comment_length:
             res.append(comment)
-            if leng >= 50:
+            if leng >= 70:
                 print(comment['line'])
         next_line_is_comment = False
         multiple_singleline_comment = ""
