@@ -136,7 +136,7 @@ def run_task():
         data_key= store_data(request, column)
         print('download complete')
         print('starting task to predict file')
-        info = {'type': type 'file': data_key, 'column': column }
+        info = {'type': type, 'file': data_key, 'column': column }
         task = create_task.delay(info)
         print(task.id)
         return jsonify({"task_id": task.id}), 200
