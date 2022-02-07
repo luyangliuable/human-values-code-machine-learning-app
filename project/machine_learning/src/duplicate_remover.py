@@ -122,7 +122,6 @@ class comment_database:
             f = StringIO(first_line + other_line)
             line = csv.DictReader(f)
             line = [single_line for single_line in line][0]
-            print(line)
             for key in line:
                 # if isinstance(line, str):
                 line[key] = line[key].replace("'","''")
