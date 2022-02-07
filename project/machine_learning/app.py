@@ -1,5 +1,6 @@
 import os
 import time
+import random
 # import git
 from redis import Redis
 import tempfile
@@ -105,7 +106,7 @@ def background_file_labeler(file, column: str):
       if val == val:
         values.append(val)
 
-  dataname = 'completed'
+  dataname = random_string()
 
   store_df(data, dataname)
 
@@ -195,7 +196,7 @@ def repo(repo_url, branch):
     prediction = binarizer.inverse_transform(prediction)
 
     data['prediction'] = prediction
-    dataname = 'completed'
+    dataname = random_string()
 
     store_df(data, dataname)
     tmp = data['prediction'].values
@@ -225,6 +226,16 @@ def repo(repo_url, branch):
 def remove_files(files: list[str]) -> None:
   for file in files:
     os.remove(file)
+
+
+def random_string():
+    rand_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'z', 'x', 'w', '1','2','3','4','5','6','7','8','9', '0']
+
+    res = ""
+    for i in range(random.randint(4, 7)):
+        res += random.choice(rand_alphabet)
+
+    return res
 
 
 if __name__ == '__main__':
