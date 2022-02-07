@@ -109,7 +109,7 @@ def getChart(dataname):
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         plt.savefig((os.path.join(tmpdirname, filename)), bbox_inches='tight', pad_inches=.1)
-        return send_file(os.path.join(tmpdirname, filename, cache_timeout=0)), 200
+        return send_file(os.path.join(tmpdirname, filename)), 200
 
     return 500
 
@@ -130,7 +130,7 @@ def getCSV(data):
         data.to_csv(os.path.join( tmpdirname, filename ))
         print('csv file successfully created', tmpdirname)
 
-        return send_file(os.path.join( tmpdirname, filename, cache_timeout=0)), 200
+        return send_file(os.path.join( tmpdirname, filename)), 200
 
     return 500
 
