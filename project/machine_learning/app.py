@@ -45,20 +45,21 @@ def plot_graph(counter, savedir):
   amount = []
   labels = []
 
-  print(counter)
-  print(counter)
-  print(counter)
-  print(counter)
-  print(counter)
+  print('counter is ', counter)
 
   for key, item in counter.items():
+    print(key, item)
     labels.append(key)
     amount.append(item)
+
 
   for l in all_labels:
     if l not in labels:
       labels.append(l)
       amount.append(0)
+
+    print(labels, amount)
+
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
 
