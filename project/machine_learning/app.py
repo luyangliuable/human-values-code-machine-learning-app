@@ -190,7 +190,8 @@ def repo(repo_url, branch):
         print(file)
         print(data)
         new_data = pd.read_csv(file)
-        pd.concat([data, new_data], axis=1)
+        print("new_data is", new_data)
+        pd.concat([new_data, data], axis=1)
         print("processing file: " + file)
 
       print(data)
@@ -205,7 +206,6 @@ def repo(repo_url, branch):
     dataname = 'completed'
 
     store_df(data, dataname)
-
 
     tmp = prediction['prediction'].values
     values = []
