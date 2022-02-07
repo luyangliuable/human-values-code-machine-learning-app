@@ -47,7 +47,7 @@ class comment_database:
         self.commit()
 
     def export_table_to_csv(self, savedir: str) -> str:
-        filename = self.create_csv_file(os.path.join(savedir, self.og_fieldnames ))
+        filename = self.create_csv_file(self.og_fieldnames, savedir)
         values = self.get_fields()
         for value in values:
             self.append_to_csv_file(self.og_fieldnames, value, filename)
@@ -80,14 +80,14 @@ class comment_database:
             writer.writerows([row])
         file.close()
 
-    def create_csv_file(self, fieldnames: List[T]) -> str:
+    def create_csv_file(self, fieldnames: List[T], savedir: str) -> str:
         # fieldnames = ['line', 'location', 'language', 'value', 'category', "keywords", "description"]
         counter = 0
 
         while True:
             filename = "removed_duplicates_commentfile" + str( counter ) + ".csv"
-            if len(app.search_file(filename, './')) == 0:
-                f = open(filename, "w")
+            if len(app.search_file(filename, savedir)) == 0:
+                f = open(os.path.join(savedir, filename ), "w")
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
                 f.close()
