@@ -201,7 +201,7 @@ class preprocess():
         res = ""
         res2 = []
 
-        if res = len(re.findall(r'\w+', comment)) <= 100:
+        if len(re.findall(r'\w+', comment)) <= 100:
 
             # print(comment)
             line = comment
