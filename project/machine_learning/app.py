@@ -44,6 +44,13 @@ def plot_graph(counter, savedir):
   all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
   amount = []
   labels = []
+
+  print(counter)
+  print(counter)
+  print(counter)
+  print(counter)
+  print(counter)
+
   for key, item in counter.items():
     labels.append(key)
     amount.append(item)
