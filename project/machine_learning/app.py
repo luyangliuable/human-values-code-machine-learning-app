@@ -186,9 +186,12 @@ def repo(repo_url, branch):
       files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
       data = pd.DataFrame()
       for file in files:
+        print(file)
         new_data = pd.read_csv(file)
+        print(new_data.head)
         new_data = new_data.drop_duplicates(subset=['line'])
         new_data = new_data.drop_duplicates(subset=['location'])
+        print(new_data.head)
         print(new_data.head)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
