@@ -249,17 +249,17 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
     depth = 1
     line_counter = 0
 
-    tmp_directory = get_snapshot_from_git(repo, branch, depth)
-
-    files = []
-
-    comment_dir = create_comment_file(language)
-
-    files = files + search_file('*' + language["format"], tmp_directory)
-
-    # The maximum line of code for each csv file ###############################
-    max_line_per_file = 50000
     with tempfile.TemporaryDirectory() as tmpdirname:
+        tmp_directory = get_snapshot_from_git(repo, branch, depth)
+
+        files = []
+
+        comment_dir = create_comment_file(language, tmpdirname)
+
+        files = files + search_file('*' + language["format"], tmp_directory)
+
+        # The maximum line of code for each csv file ###############################
+        max_line_per_file = 50000
         for file in files:
             if line_counter > max_line_per_file:
                 comment_dir = create_comment_file(language, tmpdirname)
