@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import chardet
 from typing import TypeVar, Generic, List, NewType
-from project.machine_learning.src.csv__modifier.modifier import csv_modifier
+from project.machine_learning.src.csv_modifier.modifier import csv_modifier
 
 T = TypeVar("T")
 ###############################################################################
