@@ -6,8 +6,6 @@ def label_counter(counter: dict) -> ( list, list ):
   print('counter is ', counter)
 
   for key, item in counter.items():
-    # print(key)
-    # print(item)
     labels.append(key)
     amount.append(item)
 

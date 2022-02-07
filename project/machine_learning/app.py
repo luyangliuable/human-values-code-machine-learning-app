@@ -105,22 +105,19 @@ def background_file_labeler(file, column: str):
       if val == val:
         values.append(val)
 
-  print('Creating chart.')
-
   dataname = 'completed'
-
-  print(data.head)
 
   store_df(data, dataname)
 
   value_count = Counter(values)
+
+  # image = plot_graph(value_count, download_folder)
 
   res = ""
   for key, val in value_count.items():
     res = res + key + ': ' + str(val) + ' '
 
   return {"data": dataname, "count": res}
-
 
 def file_labeler():
   if 'file' not in request.files:
@@ -201,15 +198,20 @@ def repo(repo_url, branch):
     dataname = 'completed'
 
     store_df(data, dataname)
-
     tmp = data['prediction'].values
+
+    print(tmp)
+
     values = []
     for item in tmp:
       for val in item:
         if val == val:
           values.append(val)
 
+    print(values)
+
     value_count = Counter(values)
+    print(value_count)
 
     res = ""
     for key, val in value_count.items():
