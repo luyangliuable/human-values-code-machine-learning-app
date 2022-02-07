@@ -282,10 +282,10 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname
             comment_dir = create_comment_file(language, tmpdirname)
             line_counter = 0
 
-        # lines_in_file = get_every_line_from_file(file)
-        # comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+        lines_in_file = get_every_line_from_file(file)
+        comments_in_file = extract_comment_from_line_list(lines_in_file, language)
 
-        comments_in_file = extract_all_comment_from_file(file, language)
+        # comments_in_file = extract_all_comment_from_file(file, language)
 
         print(comments_in_file)
 
