@@ -48,7 +48,8 @@ def plot_graph(counter, savedir):
   print('counter is ', counter)
 
   for key, item in counter.items():
-    print(key, item)
+    print(key)
+    print(item)
     labels.append(key)
     amount.append(item)
 
@@ -58,7 +59,9 @@ def plot_graph(counter, savedir):
       labels.append(l)
       amount.append(0)
 
-    print(labels, amount)
+    print(labels)
+    print(amount)
+
 
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
