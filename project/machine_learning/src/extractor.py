@@ -173,9 +173,8 @@ def get_comment_from_repo_using_all_languages(repo: str, branch: str, output_dir
     output_dir --
     """
     files = []
-    with tempfile.TemporaryDirectory() as tmpdirname:
         for key in languages:
-            files.append(extract_comment_from_repo(repo, branch, languages[key], tmpdirname))
+            files.append(extract_comment_from_repo(repo, branch, languages[key], output_dir))
 
         return files
 

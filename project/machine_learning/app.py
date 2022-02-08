@@ -181,17 +181,18 @@ def to_only_none(input):
 def repo(repo_url, branch):
     print("attempting to get from repo")
     repo = repo_url
-    files = extractor.get_comment_from_repo_using_all_languages(repo , branch, './')
-    column = 'line'
-    data = pd.DataFrame()
-    for file in files:
-      print(file)
-      print(data)
-      new_data = pd.read_csv(file)
-      pd.concat([data, new_data], axis=1)
-      print("processing file: " + file)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+      files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
+      column = 'line'
+      data = pd.DataFrame()
+      for file in files:
+        print(file)
+        print(data)
+        new_data = pd.read_csv(file)
+        pd.concat([data, new_data], axis=1)
+        print("processing file: " + file)
 
-    print(data)
+      print(data)
     data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
 
     print("predicting")
