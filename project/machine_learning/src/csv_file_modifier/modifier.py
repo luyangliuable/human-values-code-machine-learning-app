@@ -92,8 +92,7 @@ class csv_modifier():
         # print("Searching in path: " + path + " for " + file_name)
         res = []
         for root, dirs, files in os.walk(path):
-            print(files)
-            print("root is ", root)
+            print("root dir is ", root)
             if file_name[0] == cls.WILDCARD_IDENTIFIER:
                 for file in files:
                     same_format = check_file_is_same_format(file_name, file)

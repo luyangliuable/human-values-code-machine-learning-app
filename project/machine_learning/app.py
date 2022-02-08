@@ -196,14 +196,17 @@ def repo(repo_url, branch):
       print(data.head)
 
     processor = pre(file, column, dictionary_file='word.pkl')
+
+    print('preprocessing...')
     data['new_line'] = data[column].apply(lambda x: processor.process_comment(x)[0])
 
-    print("predicting")
+    print("predicting...")
     prediction, binarizer = model.predict(data[['new_line', 'language']])
     prediction = binarizer.inverse_transform(prediction)
     print(prediction)
 
     dataname = 'completed'
+    print(dataname)
 
     store_df(data, dataname)
 
