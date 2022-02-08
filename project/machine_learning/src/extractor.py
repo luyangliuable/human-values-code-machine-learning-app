@@ -382,6 +382,7 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
 
     return res
 
+
 def search_file(file_name: str, path: str) -> List[T]:
     """Search a root directory for a particular file
 
@@ -525,12 +526,13 @@ def create_comment_file(language) -> str:
 
     counter = 0
     res = ""
+    mod = modifier()
 
     fieldnames = ['line', 'location', 'language']
     with tempfile.TemporaryDirectory() as tmpdirname:
         while True:
             filename = "commentfile" + str(counter) + ".csv"
-            if len(search_file(filename, tmpdirname)) == 0:
+            if len(modifier.search_file(filename, tmpdirname, 'csv')) == 0:
                 print("creating new comment file", filename, "for language", language['language'])
                 res = os.path.join(tmpdirname, filename)
                 f = open(res, "a")
