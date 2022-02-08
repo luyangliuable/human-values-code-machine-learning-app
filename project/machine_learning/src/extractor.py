@@ -173,10 +173,11 @@ def get_comment_from_repo_using_all_languages(repo: str, branch: str, output_dir
     output_dir --
     """
     files = []
-    for key in languages:
-        files.append(extract_comment_from_repo(repo, branch, languages[key], output_dir))
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        for key in languages:
+            files.append(extract_comment_from_repo(repo, branch, languages[key], tmpdirname))
 
-    return files
+        return files
 
 def get_comment_from_path_using_all_languages(directory: str, output_dir: str):
     for key in languages:
@@ -236,7 +237,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
         line_counter += len(comments_in_file)
 
 
-def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir: str) -> str:
+def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname: str) -> str:
     """Extracts all comments from file contained inside a path
 
     Keyword Arguments:
@@ -249,27 +250,26 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
     depth = 1
     line_counter = 0
 
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        tmp_directory = get_snapshot_from_git(repo, branch, depth)
+    tmp_directory = get_snapshot_from_git(repo, branch, depth)
 
-        files = []
+    files = []
 
-        comment_dir = create_comment_file(language, tmpdirname)
+    comment_dir = create_comment_file(language, tmpdirname)
 
-        files = files + search_file('*' + language["format"], tmp_directory)
+    files = files + search_file('*' + language["format"], tmp_directory)
 
-        # The maximum line of code for each csv file ###############################
-        max_line_per_file = 50000
-        for file in files:
-            if line_counter > max_line_per_file:
-                comment_dir = create_comment_file(language, tmpdirname)
-                line_counter = 0
+    # The maximum line of code for each csv file ###############################
+    max_line_per_file = 50000
+    for file in files:
+        if line_counter > max_line_per_file:
+            comment_dir = create_comment_file(language, tmpdirname)
+            line_counter = 0
 
-            lines_in_file = get_every_line_from_file(file)
-            comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+        lines_in_file = get_every_line_from_file(file)
+        comments_in_file = extract_comment_from_line_list(lines_in_file, language)
 
-            write_comment_file(comments_in_file, comment_dir)
-            line_counter += len(comments_in_file)
+        write_comment_file(comments_in_file, comment_dir)
+        line_counter += len(comments_in_file)
 
     return comment_dir
 
