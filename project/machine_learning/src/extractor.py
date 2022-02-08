@@ -1,6 +1,7 @@
 import os
 import git
 import csv
+import tempfile
 import shutil
 import tempfile
 import chardet
@@ -166,7 +167,6 @@ perl_comment = languages['perl']
 
 def get_comment_from_repo_using_all_languages(repo: str, branch: str, output_dir: str) -> list:
     """
-
     Keyword arguments:
     repo --
     branch --
@@ -216,7 +216,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
     language -- the programming language to search in
     """
     files = []
-    comment_dir = create_comment_file(output_dir, language)
+    comment_dir = create_comment_file(language)
 
     files = files + search_file('*' + language["format"], directory)
 
@@ -226,7 +226,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
     max_line_per_file = 50000
     for file in files:
         if line_counter > max_line_per_file:
-            comment_dir = create_comment_file(output_dir, language)
+            comment_dir = create_comment_file(language)
             line_counter = 0
 
         lines_in_file = get_every_line_from_file(file)
@@ -247,20 +247,21 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
     language -- the programming language to search in
     """
     depth = 1
+    line_counter = 0
+
     tmp_directory = get_snapshot_from_git(repo, branch, depth)
 
     files = []
-    comment_dir = create_comment_file(output_dir, language)
+
+    comment_dir = create_comment_file(language)
 
     files = files + search_file('*' + language["format"], tmp_directory)
-
-    line_counter = 0
 
     # The maximum line of code for each csv file ###############################
     max_line_per_file = 50000
     for file in files:
         if line_counter > max_line_per_file:
-            comment_dir = create_comment_file(output_dir, language)
+            comment_dir = create_comment_file(language)
             line_counter = 0
 
         lines_in_file = get_every_line_from_file(file)
@@ -270,9 +271,6 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
         line_counter += len(comments_in_file)
 
     return comment_dir
-
-    # disabled remove tmp directory after completing #########################
-    # shutil.rmtree(tmp_directory)
 
 
 def get_every_line_from_file(filename: str) -> List[T]:
@@ -516,28 +514,31 @@ def find_text_enclosed_inside(line: str, sexpressions: List[str]) -> str:
     return res
 
 
-def create_comment_file(target: str, language) -> str:
+def create_comment_file(language) -> str:
     """Create a comment file in the target directory
 
     Keyword Arguments:
 
     target -- the target directory
     """
+    print("creating_comment_file!")
+
     counter = 0
     res = ""
 
     fieldnames = ['line', 'location', 'language']
-    while True:
-        filename = "commentfile" + str(counter) + ".csv"
-        if len(search_file(filename, ".")) == 0:
-            print("creating new comment file", filename, "for language", language['language'])
-            res = target + filename
-            f = open(res, "a")
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            f.close()
-            break
-        counter += 1
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        while True:
+            filename = "commentfile" + str(counter) + ".csv"
+            if len(search_file(filename, tmpdirname)) == 0:
+                print("creating new comment file", filename, "for language", language['language'])
+                res = os.path.join(tmpdirname, filename)
+                f = open(res, "a")
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                f.close()
+                break
+            counter += 1
 
     return res
 

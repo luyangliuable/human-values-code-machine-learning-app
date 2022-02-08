@@ -124,7 +124,7 @@ def getCSV(data):
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
     type = request.form.get('type')
-    print(type)
+    print("type is", type)
     if type == 'label':
         file = request.files.get('file')
         column = request.form.get('column')
@@ -137,6 +137,13 @@ def run_task():
         print('download complete')
         print('starting task to predict file')
         info = {'type': type, 'file': data_key, 'column': column }
+        task = create_task.delay(info)
+        print(task.id)
+        return jsonify({"task_id": task.id}), 200
+    if type == 'repo':
+        repo_url = request.form.get('repo_url')
+        branch = request.form.get('branch')
+        info = {'type': type, 'repo_url': repo_url, 'branch': branch }
         task = create_task.delay(info)
         print(task.id)
         return jsonify({"task_id": task.id}), 200

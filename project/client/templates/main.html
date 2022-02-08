@@ -31,15 +31,15 @@
  }
 
 
- function handleClick2(event) {
+ function handleClick_repo(event) {
      event.preventDefault();
 
      $('#images, #btn').fadeOut(200);
 
      var form_data = new FormData();
-     form_data.append('repo_url', $('#a').prop('files')[0]);
-     form_data.append('branch', $('#column').val()); <!--  -->
+     form_data.append('repo_url', $('#repo_url').val());
      form_data.append('type', 'repo');
+     form_data.append('branch', $('#branch').val()); <!--  -->
 
      fetch('/tasks', {
          method: 'POST',
@@ -113,10 +113,10 @@ function getStatus(taskID) {
     <!------------------------------------------------------------------------>
     <form name="repo_getter" method="POST">
 
-        <input type='text' name="repo_url" placeholder="repo url" />
-        <input type='text' name="branch" placeholder="branchname" />
+        <input type='text' id="repo_url" placeholder="repo url" />
+        <input type='text' id="branch" placeholder="branchname" />
 
-        <input class="button" onclick="handleClick2(event)" value="Retrieve" />
+        <input class="button" onclick="handleClick_repo(event)" value="Retrieve" />
 
     </form>
 

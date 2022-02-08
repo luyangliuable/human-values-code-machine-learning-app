@@ -85,8 +85,11 @@ def background_file_labeler(file, column: str):
 
   download_folder = "project/server/"
   filename = file
+
   data = pickle.loads(zlib.decompress(r.get(column)))
+
   print("processing file: " + filename, 'in column', column)
+
   process = pre(file, column, dictionary_file='word.pkl')
 
   data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
@@ -175,28 +178,49 @@ def to_only_none(input):
             res.append(item)
     return np.array(res)
 
-def repo():
-  files = ""
-  processed_files = []
-  if len(request.form) > 0:
-    repo = request.form['repo_url']
-    branch = request.form['branch']
-    try:
-      files = extractor.get_comment_from_repo_using_all_languages(repo , branch, './')
-      column = 'line'
-      for file in files:
-        print("processing file: " + file)
-        process = pre(field_to_process=column)
-        processed_files.append(process.create_new_processed_file())
+def repo(repo_url, branch):
+    print("attempting to get from repo")
+    repo = repo_url
+    files = extractor.get_comment_from_repo_using_all_languages(repo , branch, './')
+    column = 'line'
+    process = pre(file, column, dictionary_file='word.pkl')
+    data = pd.DataFrame()
+    for file in files:
+      new_data = pd.read_csv(file)
+      pd.concat([data, new_data], axis=1)
+      print("processing file: " + file)
 
-      remove_files(files)
-      print("predicting")
-      result = model.predict_files(['new_line', 'language'], processed_files)
-      remove_files(processed_files)
-      download = send_file(result)
-    except Exception as e:
-      print(e)
-  return download
+    data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
+
+    print("predicting")
+    prediction, binarizer = model.predict(data[['new_line', 'language']])
+    print(prediction)
+    prediction = binarizer.inverse_transform(prediction)
+    print(prediction)
+
+    dataname = 'completed'
+
+    store_df(data, dataname)
+
+
+    tmp = prediction['prediction'].values
+    values = []
+    for item in tmp:
+      print(values)
+      for val in item:
+        print(val)
+        if val == val:
+          values.append(val)
+
+    value_count = Counter(values)
+
+    res = ""
+    for key, val in value_count.items():
+      res = res + key + ': ' + str(val) + ' '
+
+    print(res)
+
+    return {"data": dataname, "count": res}
 
 
 def remove_files(files: list[str]) -> None:

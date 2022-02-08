@@ -20,4 +20,9 @@ def create_task(info):
         column = info['column']
         result = machine_learning.background_file_labeler(file, column)
         return result, 200
+    if type == 'repo':
+        repo_url = info['branch_url']
+        branch = info['branch']
+        result = machine_learning.repo()
+        return result, 200
 
