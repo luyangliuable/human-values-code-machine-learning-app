@@ -93,6 +93,7 @@ class csv_modifier():
         res = []
         for root, dirs, files in os.walk(path):
             print(files)
+            print("root is ", root)
             if file_name[0] == cls.WILDCARD_IDENTIFIER:
                 for file in files:
                     same_format = check_file_is_same_format(file_name, file)
@@ -110,7 +111,7 @@ class csv_modifier():
                         else:
                             res.append(root + file)
 
-                if file:
+                if "file" in locals():
                     found = file.find(file_name)
                 else:
                     print(os.path.join(path, file_name))
