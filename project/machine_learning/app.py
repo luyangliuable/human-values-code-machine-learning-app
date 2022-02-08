@@ -188,9 +188,9 @@ def repo(repo_url, branch):
       data = pd.DataFrame()
       for file in files:
         print(file)
-        print(data)
         new_data = pd.read_csv(file)
-        data = pd.concat([new_data, data], axis=1)
+        print(new_data)
+        data = pd.concat([new_data, data], axis=1, ignore_index=True)
         print("processing file: " + file)
 
       print(data)
