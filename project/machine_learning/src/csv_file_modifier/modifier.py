@@ -103,13 +103,13 @@ class csv_modifier():
                             res.append(root + file)
             else:
                 for file in files:
+                    print('file is', file)
                     if file == file_name:
                         if root[-1] != "/" and file[0] != "/":
                             res.append(root + "/" + file)
                         else:
                             res.append(root + file)
 
-                print('file is', file)
                 if file:
                     found = file.find(file_name)
                 else:
