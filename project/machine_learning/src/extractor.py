@@ -259,16 +259,17 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
 
     # The maximum line of code for each csv file ###############################
     max_line_per_file = 50000
-    for file in files:
-        if line_counter > max_line_per_file:
-            comment_dir = create_comment_file(language)
-            line_counter = 0
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        for file in files:
+            if line_counter > max_line_per_file:
+                comment_dir = create_comment_file(language, tmpdirname)
+                line_counter = 0
 
-        lines_in_file = get_every_line_from_file(file)
-        comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+            lines_in_file = get_every_line_from_file(file)
+            comments_in_file = extract_comment_from_line_list(lines_in_file, language)
 
-        write_comment_file(comments_in_file, comment_dir)
-        line_counter += len(comments_in_file)
+            write_comment_file(comments_in_file, comment_dir)
+            line_counter += len(comments_in_file)
 
     return comment_dir
 
@@ -515,7 +516,7 @@ def find_text_enclosed_inside(line: str, sexpressions: List[str]) -> str:
     return res
 
 
-def create_comment_file(language) -> str:
+def create_comment_file(language, tmpdirname) -> str:
     """Create a comment file in the target directory
 
     Keyword Arguments:
@@ -529,14 +530,14 @@ def create_comment_file(language) -> str:
     modifier = csv_modifier()
 
     fieldnames = ['line', 'location', 'language']
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        filename = modifier.find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
-        print("creating new comment file", filename, "for language", language['language'])
-        res = os.path.join(tmpdirname, filename)
-        with open(res, "w", encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-        f.close()
+    # with tempfile.TemporaryDirectory() as tmpdirname:
+    filename = modifier.find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
+    print("creating new comment file", filename, "for language", language['language'])
+    res = os.path.join(tmpdirname, filename)
+    with open(res, "w", encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+    f.close()
 
     return res
 
