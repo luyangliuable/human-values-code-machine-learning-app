@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import chardet
 from typing import TypeVar, Generic, List, NewType
-from project.machine_learning.src.csv_file_modifier import modifier
+from project.machine_learning.src.csv__modifier.modifier import csv_modifier
 
 T = TypeVar("T")
 ###############################################################################
@@ -526,7 +526,7 @@ def create_comment_file(language) -> str:
 
     counter = 0
     res = ""
-    mod = modifier()
+    modifier = csv_modifier()
 
     fieldnames = ['line', 'location', 'language']
     with tempfile.TemporaryDirectory() as tmpdirname:
