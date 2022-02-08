@@ -2,6 +2,7 @@ import os
 import time
 # import git
 from redis import Redis
+import tempfile
 import pickle
 import zlib
 import numpy as np
