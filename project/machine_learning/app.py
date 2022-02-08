@@ -190,8 +190,7 @@ def repo(repo_url, branch):
         print(file)
         print(data)
         new_data = pd.read_csv(file)
-        print("new_data is", new_data)
-        pd.concat([new_data, data], axis=1)
+        data = pd.concat([new_data, data], axis=1)
         print("processing file: " + file)
 
       print(data)
