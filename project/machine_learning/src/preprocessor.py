@@ -198,6 +198,7 @@ class preprocess():
     def process_comment(self, comment: str) -> List[T]:
         # source: https://stackoverflow.com/questions/15547409/how-to-get-rid-of-punctuation-using-nltk-tokenizer#15555162
 
+        print(comment)
         line = comment
         line = self.replace_sym_with_space(line)
         line = self.split_word(line, is_list=False)
