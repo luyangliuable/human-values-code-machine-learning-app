@@ -173,10 +173,10 @@ def get_comment_from_repo_using_all_languages(repo: str, branch: str, output_dir
     output_dir --
     """
     files = []
-        for key in languages:
-            files.append(extract_comment_from_repo(repo, branch, languages[key], output_dir))
+    for key in languages:
+        files.append(extract_comment_from_repo(repo, branch, languages[key], output_dir))
 
-        return files
+    return files
 
 def get_comment_from_path_using_all_languages(directory: str, output_dir: str):
     for key in languages:
