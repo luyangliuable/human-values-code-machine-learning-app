@@ -189,11 +189,11 @@ def repo(repo_url, branch):
       for file in files:
         print(file)
         new_data = pd.read_csv(file)
-        print(new_data)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
 
-      print(data)
+      print(data.shape)
+      print(data.head)
     data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
 
     print("predicting")
@@ -230,9 +230,6 @@ def remove_files(files: list[str]) -> None:
   for file in files:
     os.remove(file)
 
-# @app.route('/result')
-# def reporter(result):
-#     return str(result)
 
 if __name__ == '__main__':
   app.run(debug=True)
