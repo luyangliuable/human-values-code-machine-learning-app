@@ -23,6 +23,6 @@ def create_task(info):
     if type == 'repo':
         repo_url = info['repo_url']
         branch = info['branch']
-        result = machine_learning.repo()
+        result = machine_learning.repo(repo_url, branch)
         return result, 200
 
