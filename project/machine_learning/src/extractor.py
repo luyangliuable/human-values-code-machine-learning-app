@@ -530,17 +530,13 @@ def create_comment_file(language) -> str:
 
     fieldnames = ['line', 'location', 'language']
     with tempfile.TemporaryDirectory() as tmpdirname:
-        while True:
-            filename = "commentfile" + str(counter) + ".csv"
-            if len(modifier.search_file(filename, tmpdirname, 'csv')) == 0:
-                print("creating new comment file", filename, "for language", language['language'])
-                res = os.path.join(tmpdirname, filename)
-                f = open(res, "a")
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writeheader()
-                f.close()
-                break
-            counter += 1
+        filename = find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
+        print("creating new comment file", filename, "for language", language['language'])
+        res = os.path.join(tmpdirname, filename)
+        f = open(res, "a")
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        f.close()
 
     return res
 
