@@ -152,7 +152,9 @@ def run_task():
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])
 def get_status(task_id):
+    print('getting task id', task_id)
     task_result = AsyncResult(task_id)
+    print(task_result)
     result = {
         "task_id": task_id,
         "task_status": task_result.status,
