@@ -266,6 +266,8 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname
 
         lines_in_file = get_every_line_from_file(file)
         comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+        print(comments_in_file)
+        print(comments_in_file)
 
         write_comment_file(comments_in_file, comment_dir)
         line_counter += len(comments_in_file)
