@@ -205,6 +205,7 @@ def repo(repo_url, branch):
     prediction = binarizer.inverse_transform(prediction)
     print(prediction)
 
+    data['prediction'] = prediction
     dataname = 'completed'
     print(dataname)
 
