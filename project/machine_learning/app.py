@@ -210,7 +210,7 @@ def repo(repo_url, branch):
 
     store_df(data, dataname)
 
-    tmp = prediction['prediction'].values
+    tmp = data['prediction'].values
     values = []
     for item in tmp:
       print(values)
