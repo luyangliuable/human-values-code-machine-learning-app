@@ -200,13 +200,15 @@ class preprocess():
 
         res = ""
         res2 = []
-
-        if len(re.findall(r'\w+', comment)) <= 100:
+        max_comment_length = 100
+        comment_length = len(re.findall(r'\w+', comment))
+        if  comment_length <= max_comment_length:
 
             # print(comment)
             line = comment
             line = self.replace_sym_with_space(line)
-            line = self.split_word(line, is_list=False)
+            if comment_length <= 40:
+                line = self.split_word(line, is_list=False)
             line = self.process_out_noise2(line)
             tokens = self.tokenise(line)
 
