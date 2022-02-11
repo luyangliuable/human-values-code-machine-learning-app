@@ -198,25 +198,27 @@ class preprocess():
     def process_comment(self, comment: str) -> List[T]:
         # source: https://stackoverflow.com/questions/15547409/how-to-get-rid-of-punctuation-using-nltk-tokenizer#15555162
 
-        print(comment)
-        line = comment
-        line = self.replace_sym_with_space(line)
-        line = self.split_word(line, is_list=False)
-        line = self.process_out_noise2(line)
-        tokens = self.tokenise(line)
-
         res = ""
         res2 = []
-        for word in tokens:
-            word = word.lower()
-            if not self.is_stopword(word):
-                word = self.stem(word)
-                if res != "":
-                    res = res + " " + word
-                else:
-                    res = word
-                res2.append(word)
 
+        if res = len(re.findall(r'\w+', comment)) <= 100:
+
+            # print(comment)
+            line = comment
+            line = self.replace_sym_with_space(line)
+            line = self.split_word(line, is_list=False)
+            line = self.process_out_noise2(line)
+            tokens = self.tokenise(line)
+
+            for word in tokens:
+                word = word.lower()
+                if not self.is_stopword(word):
+                    word = self.stem(word)
+                    if res != "":
+                        res = res + " " + word
+                    else:
+                        res = word
+                    res2.append(word)
 
         return res, res2
 
@@ -258,7 +260,7 @@ class preprocess():
 
         new_features = ['line', 'new_line', 'trigram', 'length']
 
-        print(self.field_to_process)
+        # print(self.field_to_process)
         df['original_comment'] = df[self.field_to_process]
 
         df['new_line'] = df[self.field_to_process].apply(lambda x: self.process_comment(x)[0])

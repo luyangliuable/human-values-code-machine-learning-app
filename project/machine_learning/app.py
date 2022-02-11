@@ -51,8 +51,8 @@ def plot_graph(counter, savedir):
   print('counter is ', counter)
 
   for key, item in counter.items():
-    print(key)
-    print(item)
+    # print(key)
+    # print(item)
     labels.append(key)
     amount.append(item)
 
@@ -61,8 +61,8 @@ def plot_graph(counter, savedir):
   #     labels.append(l)
   #     amount.append(0)
 
-  print(labels)
-  print(amount)
+  # print(labels)
+  # print(amount)
 
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
@@ -192,8 +192,8 @@ def repo(repo_url, branch):
         data = pd.concat([new_data, data])
         print("processing file: " + file)
 
-      print(data.shape)
-      print(data.head)
+      # print(data.shape)
+      # print(data.head)
 
     processor = pre(file, column, dictionary_file='word.pkl')
 
@@ -226,7 +226,7 @@ def repo(repo_url, branch):
     for key, val in value_count.items():
       res = res + key + ': ' + str(val) + ' '
 
-    print(res)
+    # print(res)
 
     return {"data": dataname, "count": res}
 
