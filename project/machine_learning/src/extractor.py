@@ -1,6 +1,7 @@
 import os
 import git
 import csv
+import re
 import tempfile
 import shutil
 import tempfile
@@ -369,7 +370,10 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
             if comment['line'] != "" and not check_if_comment_is_empty(comment, language):
                 assert comment.__class__ is dict, "class of comment must be stored in dictionary"
                 previous_line_is_comment = True
-                res.append(comment)
+                leng = len(re.findall(r'\w+', comment))
+                if leng <= 100:
+                    print(leng)
+                    res.append(comment)
 
     if next_line_is_comment:
         multiple_singleline_comment += nextline_singleline_comment + " "
@@ -377,7 +381,9 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
         comment['line'] = strip_comment_of_symbols(comment['line'], language)
         comment['line'] = remove_starting_whitespace(comment['line'])
         assert comment['line'][0] != " ", "no starting whitespace allowed"
-        res.append(comment)
+        leng = len(re.findall(r'\w+', comment))
+        if leng <= 100:
+            res.append(comment)
         next_line_is_comment = False
         multiple_singleline_comment = ""
 
