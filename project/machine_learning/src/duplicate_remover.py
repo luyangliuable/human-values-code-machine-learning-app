@@ -52,7 +52,7 @@ class comment_database:
         for value in values:
             self.append_to_csv_file(self.og_fieldnames, value, filename)
 
-        return filename
+        return os.path.join(savedir, filename)
 
 
     def append_to_csv_file(self, fields: List[T], values: List[T], filename: str ) -> None:
