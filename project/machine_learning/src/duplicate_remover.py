@@ -46,8 +46,8 @@ class comment_database:
             """)
         self.commit()
 
-    def export_table_to_csv(self) -> str:
-        filename = self.create_csv_file(self.og_fieldnames)
+    def export_table_to_csv(self, savedir: str) -> str:
+        filename = self.create_csv_file(os.path.join(savedir, self.og_fieldnames ))
         values = self.get_fields()
         for value in values:
             self.append_to_csv_file(self.og_fieldnames, value, filename)

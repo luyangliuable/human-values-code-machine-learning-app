@@ -187,13 +187,17 @@ def repo(repo_url, branch):
       files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
       data = pd.DataFrame()
       for file in files:
-        print(file)
-        new_data = pd.read_csv(file)
+        comment_db = cdb(file)
+        comment_db.remove_duplicates_in_database()
+        removed_dup_file = comment_db.export_table_to_csv(tmpdirname)
+        print(removed_dup_file)
+        new_data = pd.read_csv(removed_dup_file)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
 
       # print(data.shape)
       # print(data.head)
+
 
     processor = pre(file, column, dictionary_file='word.pkl')
 
