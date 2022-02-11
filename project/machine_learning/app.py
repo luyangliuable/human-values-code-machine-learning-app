@@ -113,9 +113,7 @@ def background_file_labeler(file, column: str):
 
   values = []
   for item in tmp:
-    print(values)
     for val in item:
-      print(val)
       if val == val:
         values.append(val)
 
@@ -210,20 +208,16 @@ def repo(repo_url, branch):
     print("predicting...")
     prediction, binarizer = model.predict(data[['new_line', 'language']])
     prediction = binarizer.inverse_transform(prediction)
-    print(prediction)
 
     data['prediction'] = prediction
     dataname = 'completed'
-    print(dataname)
 
     store_df(data, dataname)
 
     tmp = data['prediction'].values
     values = []
     for item in tmp:
-      print(values)
       for val in item:
-        print(val)
         if val == val:
           values.append(val)
 
