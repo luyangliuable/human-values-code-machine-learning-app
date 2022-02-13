@@ -17,10 +17,10 @@ from io import StringIO
 from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier as cm
 from nltk.metrics.distance import edit_distance
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('words')
-nltk.download('reuters')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('words')
+# nltk.download('reuters')
 
 from nltk.corpus import stopwords as sw
 from nltk.corpus import reuters
