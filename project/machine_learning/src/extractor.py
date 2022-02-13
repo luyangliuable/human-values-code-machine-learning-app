@@ -296,20 +296,25 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname
 
 
 def get_every_multiline(filename: str, language: dict):
-    with open(filename, "r") as f:
-        a = f.read()
-        raw_multiline = re.findall(language["multiline_start"] + ".*?" + language["multiline_end"], a, flags=re.DOTALL)
+    res = []
+    try:
+        with open(filename, "r") as f:
+            a = f.read()
+            raw_multiline = re.findall(language["multiline_start"] + ".*?" + language["multiline_end"], a, flags=re.DOTALL)
 
-        for item in language['strip']:
-            raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
+            for item in language['strip']:
+                raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
 
-        c = [re.sub('\n', ' ', s) for s in raw_multiline]
-        c = [re.sub('( )+', ' ', s) for s in c]
-        final_multiline = [s.strip() for s in c]
+            c = [re.sub('\n', ' ', s) for s in raw_multiline]
+            c = [re.sub('( )+', ' ', s) for s in c]
+            final_multiline = [s.strip() for s in c]
 
-    f.close()
+        f.close()
 
-    res = transform_list_to_dict_line(filename, final_multiline, language['language'])
+        res = transform_list_to_dict_line(filename, final_multiline, language['language'])
+    except:
+        pass
+
     return res
 
 
@@ -322,27 +327,31 @@ def transform_list_to_dict_line(filename: str, arr: list[str], language: str) ->
 
 
 def get_every_singleline(filename: str, language: dict):
+    linecache.clearcache()
     modifier = csv_modifier()
     num_of_lines = modifier.get_number_of_lines_in_file(filename)
     res = []
     count = 0
     prev = False
     for i in range(num_of_lines):
-        a = linecache.getline(filename, i)
-        b =  re.findall("(?<=" + language['single_line'][0] + ").+?[\n\r]", a)
-        if b != []:
-            b[0] = b[0].strip()
-            if b[0] != '':
-                prev = True
-                if len(res) <= count:
-                    res.append("")
-                    res[count] += b[0] + " "
-                else:
-                    res[count] += b[0] + " "
-        else:
-            if prev == True:
-                count += 1
-            prev = False
+        try:
+            a = linecache.getline(filename, i)
+            b =  re.findall("(?<=" + language['single_line'][0] + ").+?[\n\r]", a)
+            if b != []:
+                b[0] = b[0].strip()
+                if b[0] != '':
+                    prev = True
+                    if len(res) <= count:
+                        res.append("")
+                        res[count] += b[0] + " "
+                    else:
+                        res[count] += b[0] + " "
+            else:
+                if prev == True:
+                    count += 1
+                prev = False
+        except:
+            pass
 
     res = transform_list_to_dict_line(filename, res, language['language'])
     return res
