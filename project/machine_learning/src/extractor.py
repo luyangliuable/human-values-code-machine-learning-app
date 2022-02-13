@@ -3,6 +3,7 @@ import git
 import csv
 import re
 import tempfile
+import linecache
 import shutil
 import tempfile
 import chardet
@@ -18,35 +19,47 @@ WILDCARD_IDENTIFIER = '*'
 
 languages = {
     "c": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'c',
         "language": "c"
     },
 
     'kotlin': {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'kt',
         "language": "kotlin"
     },
 
     "c++": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'cpp',
         "language": "c++"
     },
 
     "javascript": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
         "format": 'js',
+        "strip": ['\/', '\*'],
         "language": "javascript"
+    },
+    "ruby": {
+        "multiline_start": '=begin',
+        "multiline_end": '=end',
+        "single_line": ["#"],
+        "format": 'rb',
+        "strip": ['=begin', '=end'],
+        "language": "ruby"
     },
     "gradle": {
         "multiline_start": '/*',
@@ -67,14 +80,16 @@ languages = {
         "multiline_start": '"""',
         "multiline_end": '"""',
         "single_line": ['#', '"""'],
+        "strip": ['"""'],
         "format": 'py',
         "language": "python"
     },
 
     "assembly": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
+        "multiline_start": '"""',
+        "multiline_end": '"""',
         "single_line": [';', '/*'],
+        "strip": ['"""'],
         "format": 'asm',
         "language": "assembly"
     },
@@ -110,15 +125,17 @@ languages = {
     "html": {
         "multiline_start": '<!--',
         "multiline_end": '-->',
-        "single_line": ['<!--'],
+        "single_line": ['▓'],
+        "strip": ["<", ">", "--", "!"],
         "format": 'html',
         "language": "html"
     },
 
     "css": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ["▓"],
+        "strip": ['/', '\*'],
         "format": 'css',
         "language": "css"
     },
@@ -265,14 +282,81 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname
             comment_dir = create_comment_file(language, tmpdirname)
             line_counter = 0
 
-        lines_in_file = get_every_line_from_file(file)
-        comments_in_file = extract_comment_from_line_list(lines_in_file, language)
-        # print(comments_in_file)
+        # lines_in_file = get_every_line_from_file(file)
+        # comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+
+        comments_in_file = extract_all_comment_from_file(file, language)
+
+        print(comments_in_file)
 
         write_comment_file(comments_in_file, comment_dir)
         line_counter += len(comments_in_file)
 
+
     return comment_dir
+
+
+def get_every_multiline(filename: str, language: dict):
+    with open(filename, "r") as f:
+        a = f.read()
+        raw_multiline = re.findall(language["multiline_start"] + ".*?" + language["multiline_end"], a, flags=re.DOTALL)
+
+        for item in language['strip']:
+            raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
+
+        c = [re.sub('\n', ' ', s) for s in raw_multiline]
+        c = [re.sub('( )+', ' ', s) for s in c]
+        final_multiline = [s.strip() for s in c]
+
+    f.close()
+
+    res = transform_list_to_dict_line(filename, final_multiline)
+    return res
+
+
+def transform_list_to_dict_line(filename: str, arr: list[str]) -> dict:
+    lines = []
+    for i, line in enumerate(arr):
+        lines.append({
+            'line': line,
+            'location': filename
+        })
+
+    return lines
+
+
+def get_every_singleline(filename: str, language: dict):
+    modifier = csv_modifier()
+    num_of_lines = modifier.get_number_of_lines_in_file(filename)
+    res = []
+    count = 0
+    prev = False
+    for i in range(num_of_lines):
+        a = linecache.getline(filename, i)
+        b =  re.findall("(?<=" + language['single_line'][0] + ").+?[\n\r]", a)
+        if b != []:
+            b[0] = b[0].strip()
+            if b[0] != '':
+                prev = True
+                if len(res) <= count:
+                    res.append("")
+                    res[count] += b[0] + " "
+                else:
+                    res[count] += b[0] + " "
+        else:
+            if prev == True:
+                count += 1
+            prev = False
+
+    res = transform_list_to_dict_line(filename, res)
+    return res
+
+
+def get_every_comment_from_file(filename: str, language: dict):
+    singleline = get_every_singleline(filename, language)
+    multiline = get_every_multiline(filename, language)
+    res = singleline + multiline
+    return res
 
 
 def get_every_line_from_file(filename: str) -> List[T]:
@@ -301,8 +385,15 @@ def get_every_line_from_file(filename: str) -> List[T]:
                 'line': lines[line_number].strip('\n'),
                 'location': filename + ": " + str(line_number+1)
             }
+    print(lines)
     return lines
 
+
+def extract_all_comment_from_file(filename:str, language: str):
+    singleline_comments = get_every_singleline(filename, language)
+    multiline_comments = get_every_multiline(filename, language)
+    res = singleline_comments + multiline_comments
+    return res
 
 def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
     """extracts the comment from a list of lines
