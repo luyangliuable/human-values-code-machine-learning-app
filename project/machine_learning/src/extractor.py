@@ -115,9 +115,10 @@ languages = {
         "language": "perl"
     },
     "java": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/'],
+        "strip": ['\/', '\*'],
         "format": 'java',
         "language": "java"
     },
