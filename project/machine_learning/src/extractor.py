@@ -308,17 +308,14 @@ def get_every_multiline(filename: str, language: dict):
 
     f.close()
 
-    res = transform_list_to_dict_line(filename, final_multiline)
+    res = transform_list_to_dict_line(filename, final_multiline, language['language'])
     return res
 
 
-def transform_list_to_dict_line(filename: str, arr: list[str]) -> dict:
+def transform_list_to_dict_line(filename: str, arr: list[str], language: str) -> dict:
     lines = []
     for i, line in enumerate(arr):
-        lines.append({
-            'line': line,
-            'location': filename
-        })
+        lines.append(save_in_dict(line, filename, language))
 
     return lines
 
@@ -346,7 +343,7 @@ def get_every_singleline(filename: str, language: dict):
                 count += 1
             prev = False
 
-    res = transform_list_to_dict_line(filename, res)
+    res = transform_list_to_dict_line(filename, res, language['language'])
     return res
 
 
