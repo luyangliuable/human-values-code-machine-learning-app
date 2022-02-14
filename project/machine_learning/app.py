@@ -37,6 +37,7 @@ def process(comment):
 
 
 def store_df(data, name) -> bool:
+    r.flushdb()
     r.set(name, zlib.compress( pickle.dumps(data)))
     print('sucessfully stored')
     return True

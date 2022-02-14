@@ -24,6 +24,7 @@ r = Redis.from_url(os.environ['REDIS_URL'])
 
 
 def store_data(request, column: str):
+    r.flushdb()
     file = request.files.get('file')
     df = pd.read_csv(file)
     data = df[[ column, 'language' ]]
