@@ -8,15 +8,21 @@ from celery import Celery
 from project.machine_learning import app as machine_learning
 
 celery = Celery(__name__)
-celery.conf.broker_url = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
-celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
+celery.conf.broker_url = os.environ['REDIS_URL']
+celery.conf.result_backend = os.environ['REDIS_URL']
 
 
 @celery.task(name="create_task")
 def create_task(info):
-    print(info)
-    file = info['file']
-    column = info['column']
-    result = machine_learning.background_file_labeler(file, column)
-    return result, 200
+    type = info['type']
+    if type == 'label':
+        file = info['file']
+        column = info['column']
+        result = machine_learning.background_file_labeler(file, column)
+        return result, 200
+    if type == 'repo':
+        repo_url = info['repo_url']
+        branch = info['branch']
+        result = machine_learning.repo(repo_url, branch)
+        return result, 200
 

@@ -1,11 +1,10 @@
 import sys
-from src import model_trainer
-from src import preprocess as pre
-from src import extractor as app
-from src import preprocess as pre
-from src import comment_database as cdb
-from src import keyword_filter
-from src.csv_file_modifier.modifier import csv_modifier as cm
+from project.machine_learning.src.model_trainer import model_trainer
+from project.machine_learning.src.preprocessor import preprocess as pre
+from project.machine_learning src.import extractor as app
+from project.machine_learning.src.duplicate_remover import comment_database as cdb
+from project.machine_learning.src.keyword_filter import keyword_filter
+from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier as cm
 ###############################################################################
 #               The run for the comment-extractor application              #
 ###############################################################################
@@ -95,5 +94,13 @@ elif length >= 3:
       for i in range(2, len(sys.argv)):
         modifier = cm(sys.argv[i])
         count += modifier.get_number_of_lines_in_file(sys.argv[i]) - 1
-
       print(count)
+    elif command1 == "-extract":
+      leng = len(sys.argv)
+      language = sys.argv[2]
+      print(language)
+      count = 0
+      for i in range(3, len(sys.argv)):
+        print(sys.argv[i])
+        get_every_line_from_file(sys.argv[i], languages["python"])
+

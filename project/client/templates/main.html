@@ -18,6 +18,7 @@
 
      var form_data = new FormData();
      form_data.append('file', $('#a').prop('files')[0]);
+     form_data.append('type', 'label');
      form_data.append('column', $('#column').val()); <!--  -->
 
      fetch('/tasks', {
@@ -27,6 +28,26 @@
              .then(response => response.json())
              .then(data => getStatus(data.task_id))
              .catch(err => console.error(err));
+ }
+
+
+ function handleClick_repo(event) {
+     event.preventDefault();
+
+     $('#images, #btn').fadeOut(200);
+
+     var form_data = new FormData();
+     form_data.append('repo_url', $('#repo_url').val());
+     form_data.append('type', 'repo');
+     form_data.append('branch', $('#branch').val()); <!--  -->
+
+     fetch('/tasks', {
+         method: 'POST',
+         body: form_data,
+     })
+         .then(response => response.json())
+         .then(data => getStatus(data.task_id))
+         .catch(err => console.error(err));
  }
 
 
@@ -55,9 +76,9 @@ function getStatus(taskID) {
                 result_display.src = res.task_result[0]['image']
                 $('#images, #btn').fadeIn(200);
                 console.log("/getCSV/" + res.task_result[0]['image'])
-                $('#images').attr('src', "/getCSV/" + res.task_result[0]['image']);
+                $('#images').attr('src', "/getChart/" + res.task_result[0]['data']);
                 $('#btn').click(function() {
-                    window.location = "/getCSV/" + res.task_result[0]['file']
+                    window.location = "/getCSV/" + res.task_result[0]['data']
                 });
 
                 return true
@@ -69,7 +90,7 @@ function getStatus(taskID) {
 
             setTimeout(function() {
                 getStatus(res.task_id);
-            }, 1000);
+            }, 5000);
         }).catch(err => console.log(err));
 }
 
@@ -90,12 +111,12 @@ function getStatus(taskID) {
     <!------------------------------------------------------------------------>
     <!--                          getting from repo                         -->
     <!------------------------------------------------------------------------>
-    <form action = "{{url_for('main.repo')}}" method="POST">
+    <form name="repo_getter" method="POST">
 
-        <input type='text' name="repo_url" placeholder="repo url" />
-        <input type='text' name="branch" placeholder="branchname" />
+        <input type='text' id="repo_url" placeholder="repo url" />
+        <input type='text' id="branch" placeholder="branchname" />
 
-        <input class="button" type="submit" value="Retrieve" />
+        <input class="button" type="button" onclick="handleClick_repo(event)" value="Retrieve" />
 
     </form>
 

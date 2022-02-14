@@ -1,11 +1,14 @@
 import os
-# import git
+import git
 import csv
+import re
+import tempfile
+import linecache
 import shutil
 import tempfile
 import chardet
 from typing import TypeVar, Generic, List, NewType
-from project.machine_learning.src.csv_file_modifier import modifier
+from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier
 
 T = TypeVar("T")
 ###############################################################################
@@ -16,35 +19,47 @@ WILDCARD_IDENTIFIER = '*'
 
 languages = {
     "c": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'c',
         "language": "c"
     },
 
     'kotlin': {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'kt',
         "language": "kotlin"
     },
 
     "c++": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
+        "strip": ['\/', '\*'],
         "format": 'cpp',
         "language": "c++"
     },
 
     "javascript": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/', '/*'],
         "format": 'js',
+        "strip": ['\/', '\*'],
         "language": "javascript"
+    },
+    "ruby": {
+        "multiline_start": '=begin',
+        "multiline_end": '=end',
+        "single_line": ["#"],
+        "format": 'rb',
+        "strip": ['=begin', '=end'],
+        "language": "ruby"
     },
     "gradle": {
         "multiline_start": '/*',
@@ -65,14 +80,16 @@ languages = {
         "multiline_start": '"""',
         "multiline_end": '"""',
         "single_line": ['#', '"""'],
+        "strip": ['"""'],
         "format": 'py',
         "language": "python"
     },
 
     "assembly": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
+        "multiline_start": '"""',
+        "multiline_end": '"""',
         "single_line": [';', '/*'],
+        "strip": ['"""'],
         "format": 'asm',
         "language": "assembly"
     },
@@ -98,9 +115,10 @@ languages = {
         "language": "perl"
     },
     "java": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['//', '/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ['\/\/'],
+        "strip": ['\/', '\*'],
         "format": 'java',
         "language": "java"
     },
@@ -108,15 +126,17 @@ languages = {
     "html": {
         "multiline_start": '<!--',
         "multiline_end": '-->',
-        "single_line": ['<!--'],
+        "single_line": ['▓'],
+        "strip": ["<", ">", "--", "!"],
         "format": 'html',
         "language": "html"
     },
 
     "css": {
-        "multiline_start": '/*',
-        "multiline_end": '*/',
-        "single_line": ['/*'],
+        "multiline_start": '\/\*',
+        "multiline_end": '\*\/',
+        "single_line": ["▓"],
+        "strip": ['/', '\*'],
         "format": 'css',
         "language": "css"
     },
@@ -166,7 +186,6 @@ perl_comment = languages['perl']
 
 def get_comment_from_repo_using_all_languages(repo: str, branch: str, output_dir: str) -> list:
     """
-
     Keyword arguments:
     repo --
     branch --
@@ -216,7 +235,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
     language -- the programming language to search in
     """
     files = []
-    comment_dir = create_comment_file(output_dir, language)
+    comment_dir = create_comment_file(language)
 
     files = files + search_file('*' + language["format"], directory)
 
@@ -226,7 +245,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
     max_line_per_file = 50000
     for file in files:
         if line_counter > max_line_per_file:
-            comment_dir = create_comment_file(output_dir, language)
+            comment_dir = create_comment_file(language)
             line_counter = 0
 
         lines_in_file = get_every_line_from_file(file)
@@ -236,7 +255,7 @@ def extract_comment_from_path(directory: str, language: dict, output_dir: str):
         line_counter += len(comments_in_file)
 
 
-def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir: str) -> str:
+def extract_comment_from_repo(repo: str, branch: str, language: dict, tmpdirname: str) -> str:
     """Extracts all comments from file contained inside a path
 
     Keyword Arguments:
@@ -247,32 +266,102 @@ def extract_comment_from_repo(repo: str, branch: str, language: dict, output_dir
     language -- the programming language to search in
     """
     depth = 1
+    line_counter = 0
+
     tmp_directory = get_snapshot_from_git(repo, branch, depth)
 
     files = []
-    comment_dir = create_comment_file(output_dir, language)
+
+    comment_dir = create_comment_file(language, tmpdirname)
 
     files = files + search_file('*' + language["format"], tmp_directory)
-
-    line_counter = 0
 
     # The maximum line of code for each csv file ###############################
     max_line_per_file = 50000
     for file in files:
         if line_counter > max_line_per_file:
-            comment_dir = create_comment_file(output_dir, language)
+            comment_dir = create_comment_file(language, tmpdirname)
             line_counter = 0
 
-        lines_in_file = get_every_line_from_file(file)
-        comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+        # lines_in_file = get_every_line_from_file(file)
+        # comments_in_file = extract_comment_from_line_list(lines_in_file, language)
+
+        comments_in_file = extract_all_comment_from_file(file, language)
 
         write_comment_file(comments_in_file, comment_dir)
         line_counter += len(comments_in_file)
 
+
     return comment_dir
 
-    # disabled remove tmp directory after completing #########################
-    # shutil.rmtree(tmp_directory)
+
+def get_every_multiline(filename: str, language: dict):
+    res = []
+    try:
+        with open(filename, "r") as f:
+            a = f.read()
+            raw_multiline = re.findall(language["multiline_start"] + ".*?" + language["multiline_end"], a, flags=re.DOTALL)
+
+            for item in language['strip']:
+                raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
+
+            c = [re.sub('\n', ' ', s) for s in raw_multiline]
+            c = [re.sub('( )+', ' ', s) for s in c]
+            final_multiline = [s.strip() for s in c]
+
+        f.close()
+
+        res = transform_list_to_dict_line(filename, final_multiline, language['language'])
+    except:
+        pass
+
+    return res
+
+
+def transform_list_to_dict_line(filename: str, arr: list[str], language: str) -> dict:
+    lines = []
+    for i, line in enumerate(arr):
+        lines.append(save_in_dict(line, filename, language))
+
+    return lines
+
+
+def get_every_singleline(filename: str, language: dict):
+    linecache.clearcache()
+    modifier = csv_modifier()
+    num_of_lines = modifier.get_number_of_lines_in_file(filename)
+    res = []
+    count = 0
+    prev = False
+    for i in range(num_of_lines):
+        try:
+            a = linecache.getline(filename, i)
+            b =  re.findall("(?<=" + language['single_line'][0] + ").+?[\n\r]", a)
+            if b != []:
+                b[0] = b[0].strip()
+                if b[0] != '':
+                    prev = True
+                    if len(res) <= count:
+                        res.append("")
+                        res[count] += b[0] + " "
+                    else:
+                        res[count] += b[0] + " "
+            else:
+                if prev == True:
+                    count += 1
+                prev = False
+        except:
+            pass
+
+    res = transform_list_to_dict_line(filename, res, language['language'])
+    return res
+
+
+def get_every_comment_from_file(filename: str, language: dict):
+    singleline = get_every_singleline(filename, language)
+    multiline = get_every_multiline(filename, language)
+    res = singleline + multiline
+    return res
 
 
 def get_every_line_from_file(filename: str) -> List[T]:
@@ -301,8 +390,15 @@ def get_every_line_from_file(filename: str) -> List[T]:
                 'line': lines[line_number].strip('\n'),
                 'location': filename + ": " + str(line_number+1)
             }
+    print(lines)
     return lines
 
+
+def extract_all_comment_from_file(filename:str, language: str):
+    singleline_comments = get_every_singleline(filename, language)
+    multiline_comments = get_every_multiline(filename, language)
+    res = singleline_comments + multiline_comments
+    return res
 
 def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
     """extracts the comment from a list of lines
@@ -317,6 +413,7 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
     languages -- the language the lines are written in
     """
 
+    max_comment_length = 100
     res = []
     multiline_comment = False
     next_line_is_comment = False
@@ -370,7 +467,11 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
             if comment['line'] != "" and not check_if_comment_is_empty(comment, language):
                 assert comment.__class__ is dict, "class of comment must be stored in dictionary"
                 previous_line_is_comment = True
-                res.append(comment)
+                leng = len(re.findall(r'\w+', comment['line']))
+                if leng <= max_comment_length:
+                    res.append(comment)
+                    if leng >= 70:
+                        print(comment['line'])
 
     if next_line_is_comment:
         multiple_singleline_comment += nextline_singleline_comment + " "
@@ -378,11 +479,16 @@ def extract_comment_from_line_list(lines: List[T], language: dict) -> List[T]:
         comment['line'] = strip_comment_of_symbols(comment['line'], language)
         comment['line'] = remove_starting_whitespace(comment['line'])
         assert comment['line'][0] != " ", "no starting whitespace allowed"
-        res.append(comment)
+        leng = len(re.findall(r'\w+', comment['line']))
+        if leng <= max_comment_length:
+            res.append(comment)
+            if leng >= 70:
+                print(comment['line'])
         next_line_is_comment = False
         multiple_singleline_comment = ""
 
     return res
+
 
 def search_file(file_name: str, path: str) -> List[T]:
     """Search a root directory for a particular file
@@ -516,28 +622,28 @@ def find_text_enclosed_inside(line: str, sexpressions: List[str]) -> str:
     return res
 
 
-def create_comment_file(target: str, language) -> str:
+def create_comment_file(language, tmpdirname) -> str:
     """Create a comment file in the target directory
 
     Keyword Arguments:
 
     target -- the target directory
     """
+    print("creating_comment_file!")
+
     counter = 0
     res = ""
+    modifier = csv_modifier()
 
     fieldnames = ['line', 'location', 'language']
-    while True:
-        filename = "commentfile" + str(counter) + ".csv"
-        if len(search_file(filename, ".")) == 0:
-            print("creating new comment file", filename, "for language", language['language'])
-            res = target + filename
-            f = open(res, "a")
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            f.close()
-            break
-        counter += 1
+    # with tempfile.TemporaryDirectory() as tmpdirname:
+    filename = modifier.find_next_filename(base_file_name="commentfile", savedir=tmpdirname)
+    print("creating new comment file", filename, "for language", language['language'])
+    res = os.path.join(tmpdirname, filename)
+    with open(res, "w", encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+    f.close()
 
     return res
 
@@ -615,6 +721,5 @@ def write_comment_file(lines_of_comment: List[T], target: str):
 
     with open(target, "a", encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
-        # writer.writeheader()
         writer.writerows(lines_of_comment)
     file.close()

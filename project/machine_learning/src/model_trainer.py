@@ -77,9 +77,13 @@ class model_trainer:
 
     def predict(self, predictee: pd.core.frame.DataFrame) -> str:
         predictee = predictee.apply(lambda col: col.str.strip())
+        print(predictee)
         predictee = predictee.apply(lambda x: self.count_vector.transform(x))
         predictee = sp.hstack(predictee)
-        return (self.model.predict(predictee)), self.binarizer
+
+        res = model_trainer.to_only_none(self.model.predict(predictee))
+
+        return res, self.binarizer
 
 
     def predict_files(self, field_name_for_prediction: list, csv_file: list, savedir: str='./'):
@@ -110,6 +114,7 @@ class model_trainer:
         return res
 
 
+    @staticmethod
     def to_only_none(input):
         res = []
         for i, item in enumerate(input):

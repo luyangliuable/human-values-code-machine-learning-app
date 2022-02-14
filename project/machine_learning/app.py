@@ -1,5 +1,10 @@
 import os
 import time
+# import git
+from redis import Redis
+import tempfile
+import pickle
+import zlib
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -10,8 +15,10 @@ from matplotlib.ticker import MaxNLocator
 from collections import Counter
 from itertools import chain
 from project.machine_learning.src.model_trainer import model_trainer
+from project.machine_learning.src import util
 from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier
 from project.machine_learning.src.preprocessor import preprocess as pre
+from project.machine_learning.src.duplicate_remover import comment_database as cdb
 from werkzeug.utils import secure_filename
 from project.machine_learning.src import extractor
 matplotlib.use('Agg')
@@ -21,32 +28,37 @@ model.open_model('model_gbdt.pkl')
 model.open_vocabulary('vectorizer.pkl')
 model.open_binarizer('binarizer.pkl')
 
+# r = Redis("machine_learning_app_redis_1", 6379)
+r = Redis.from_url(os.environ['REDIS_URL'])
+
 def process(comment):
   process = pre(dictionary_file='word.pkl')
   return process.process_comment(comment)
 
 
+def store_df(data, name) -> bool:
+    r.flushdb()
+    r.set(name, zlib.compress( pickle.dumps(data)))
+    print('sucessfully stored')
+    return True
+
+
 def plot_graph(counter, savedir):
   modifier = csv_modifier()
-  all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
-  amount = []
-  labels = []
-  for key, item in counter.items():
-    labels.append(key)
-    amount.append(item)
 
-  for l in all_labels:
-    if l not in labels:
-      labels.append(l)
-      amount.append(0)
+  # all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
+
+  print('counter is ', counter)
+
+  labels, amount = util.label_counter(counter)
+  print("labels are", labels)
+  print("label amounts are", amount)
+
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
-
   colors = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
   plt.bar(labels, amount, align='center')
-
   filename = modifier.find_next_filename('lb', savedir, 'jpg')
-
   plt.savefig(os.path.join(savedir, filename), bbox_inches='tight', pad_inches=.1)
 
   return filename
@@ -56,6 +68,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def background_file_labeler(file, column: str):
   result = ""
 
@@ -63,38 +76,51 @@ def background_file_labeler(file, column: str):
 
   download_folder = "project/server/"
   filename = file
-  predicted_filename = 'predicted_file.csv'
+
+  data = pickle.loads(zlib.decompress(r.get(column)))
+
   print("processing file: " + filename, 'in column', column)
+
   process = pre(file, column, dictionary_file='word.pkl')
-  processed_files.append(process.create_new_processed_file(download_folder))
 
-  print("predicting", processed_files)
-  predicted_file = model.predict_file(['new_line', 'language'], processed_files[0], download_folder)
+  data['new_line'] = data[column].apply(lambda x: process.process_comment(x)[0])
 
-  processed_files = [os.path.join(download_folder, file) for file in processed_files]
+  print("predicting", filename)
 
-  print("Skip: removing", processed_files)
-  # remove_files(processed_files)
+  prediction, binarizer = model.predict(data[['new_line', 'language']])
 
-  print('interpreting', predicted_file)
-  data = pd.read_csv(os.path.join(download_folder, predicted_file ))
+  prediction = binarizer.inverse_transform(prediction)
+
+  print(prediction)
+
+  data['prediction'] = prediction
+
   tmp = data['prediction'].values
+
+  print('tmp is', tmp)
 
   values = []
   for item in tmp:
-    if item == item:
-      values = values + item.strip().split(' ')
+    for val in item:
+      if val == val:
+        values.append(val)
 
   print('Creating chart.')
+
+  dataname = 'completed'
+
+  print(data.head)
+
+  store_df(data, dataname)
+
   value_count = Counter(values)
-  image = plot_graph(value_count, download_folder)
 
   res = ""
   for key, val in value_count.items():
     res = res + key + ': ' + str(val) + ' '
 
-  frontend_download = "/static/"
-  return {'count': res, 'image': image, 'file': predicted_file }
+  return {"data": dataname, "count": res}
+
 
 def file_labeler():
   if 'file' not in request.files:
@@ -140,37 +166,64 @@ def to_only_none(input):
             res.append(item)
     return np.array(res)
 
-def repo():
-  files = ""
-  processed_files = []
-  if len(request.form) > 0:
-    repo = request.form['repo_url']
-    branch = request.form['branch']
-    try:
-      files = extractor.get_comment_from_repo_using_all_languages(repo , branch, './')
-      column = 'line'
+def repo(repo_url, branch):
+    print("attempting to get from repo")
+    repo = repo_url
+    column = 'line'
+    with tempfile.TemporaryDirectory() as tmpdirname:
+      files = extractor.get_comment_from_repo_using_all_languages(repo , branch, tmpdirname)
+      data = pd.DataFrame()
       for file in files:
+        print(file)
+        new_data = pd.read_csv(file)
+        print(new_data.head)
+        new_data = new_data.drop_duplicates(subset=['line'])
+        new_data = new_data.drop_duplicates(subset=['location'])
+        print(new_data.head)
+        print(new_data.head)
+        data = pd.concat([new_data, data])
         print("processing file: " + file)
-        process = pre(file, column)
-        processed_files.append(process.create_new_processed_file())
 
-      remove_files(files)
-      print("predicting")
-      result = model.predict_files(['new_line', 'language'], processed_files)
-      remove_files(processed_files)
-      download = send_file(result)
-    except Exception as e:
-      print(e)
-  return download
+      print(data.shape)
+      print(data.head)
+
+
+    processor = pre(file, column, dictionary_file='word.pkl')
+
+    print('preprocessing...')
+    data['new_line'] = data[column].apply(lambda x: processor.process_comment(x)[0])
+
+    print("predicting...")
+    prediction, binarizer = model.predict(data[['new_line', 'language']])
+    prediction = binarizer.inverse_transform(prediction)
+
+    data['prediction'] = prediction
+    dataname = 'completed'
+
+    store_df(data, dataname)
+
+    tmp = data['prediction'].values
+    values = []
+    for item in tmp:
+      for val in item:
+        if val == val:
+          values.append(val)
+
+    value_count = Counter(values)
+
+    res = ""
+    for key, val in value_count.items():
+      res = res + key + ': ' + str(val) + ' '
+
+    # print(res)
+
+    return {"data": dataname, "count": res}
 
 
 def remove_files(files: list[str]) -> None:
   for file in files:
     os.remove(file)
 
-# @app.route('/result')
-# def reporter(result):
-#     return str(result)
 
 if __name__ == '__main__':
   app.run(debug=True)

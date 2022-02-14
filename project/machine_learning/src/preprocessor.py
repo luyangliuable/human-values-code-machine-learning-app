@@ -17,10 +17,10 @@ from io import StringIO
 from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier as cm
 from nltk.metrics.distance import edit_distance
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('words')
-nltk.download('reuters')
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('words')
+# nltk.download('reuters')
 
 from nltk.corpus import stopwords as sw
 from nltk.corpus import reuters
@@ -38,8 +38,6 @@ class preprocess():
         print(dictionary_file)
         if dictionary_file !=  None:
             self.correct_words = joblib.load(dictionary_file)
-        if csv_file is not None:
-            self.open_csv_file(csv_file)
 
     def set_field_to_process(self, field_to_process: str='line'):
         self.field_to_process = field_to_process
@@ -141,7 +139,7 @@ class preprocess():
 
 
     def replace_sym_with_space(self, sentence: str) -> str:
-        symbols = ".()_-,\"'"
+        symbols = ".()_-,\"':{}[]/\\+!?"
         rep = dict((re.escape(k), " ") for k in symbols)
         pattern = re.compile("|".join(rep.keys()))
         text = pattern.sub(lambda m: rep[re.escape(m.group(0))], sentence)
@@ -200,23 +198,29 @@ class preprocess():
     def process_comment(self, comment: str) -> List[T]:
         # source: https://stackoverflow.com/questions/15547409/how-to-get-rid-of-punctuation-using-nltk-tokenizer#15555162
 
-        line = comment
-        line = self.replace_sym_with_space(line)
-        line = self.split_word(line, is_list=False)
-        line = self.process_out_noise2(line)
-        tokens = self.tokenise(line)
-
         res = ""
         res2 = []
-        for word in tokens:
-            word = word.lower()
-            if not self.is_stopword(word):
-                word = self.stem(word)
-                if res != "":
-                    res = res + " " + word
-                else:
-                    res = word
-                res2.append(word)
+        max_comment_length = 100
+        comment_length = len(re.findall(r'\w+', comment))
+        if  comment_length <= max_comment_length:
+
+            # print(comment)
+            line = comment
+            line = self.replace_sym_with_space(line)
+            if comment_length <= 40:
+                line = self.split_word(line, is_list=False)
+            line = self.process_out_noise2(line)
+            tokens = self.tokenise(line)
+
+            for word in tokens:
+                word = word.lower()
+                if not self.is_stopword(word):
+                    word = self.stem(word)
+                    if res != "":
+                        res = res + " " + word
+                    else:
+                        res = word
+                    # res2.append(word)
 
         return res, res2
 
@@ -258,7 +262,7 @@ class preprocess():
 
         new_features = ['line', 'new_line', 'trigram', 'length']
 
-        print(self.field_to_process)
+        # print(self.field_to_process)
         df['original_comment'] = df[self.field_to_process]
 
         df['new_line'] = df[self.field_to_process].apply(lambda x: self.process_comment(x)[0])
