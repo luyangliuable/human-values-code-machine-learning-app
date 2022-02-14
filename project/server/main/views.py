@@ -1,6 +1,7 @@
 # project/server/main/views.py
 import os
 import tempfile
+import random
 import struct
 import pickle
 import zlib
@@ -98,7 +99,14 @@ def getChart(dataname):
 
     plt.bar(labels, amount, align='center')
 
-    filename = 'lb3.jpg'
+    rand_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'z', 'x', 'w', '1','2','3','4','5','6','7','8','9', '0']
+
+    filename = ""
+    for i in range(random.randint(4, 7)):
+        filename += random.choice(rand_alphabet)
+
+    filename += ".jpg"
+
     with tempfile.TemporaryDirectory() as tmpdirname:
         plt.savefig((os.path.join(tmpdirname, filename)), bbox_inches='tight', pad_inches=.1)
         return send_file(os.path.join(tmpdirname, filename)), 200
@@ -110,10 +118,19 @@ def getChart(dataname):
 def getCSV(data):
     data = pickle.loads(zlib.decompress(r.get(data)))
     with tempfile.TemporaryDirectory() as tmpdirname:
-        data.to_csv(os.path.join( tmpdirname, 'file.csv' ))
+
+        rand_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'z', 'x', 'w', '1','2','3','4','5','6','7','8','9', '0']
+
+        filename = ""
+
+        for i in range(random.randint(4, 7)):
+            filename += random.choice(rand_alphabet)
+
+        filename += ".csv"
+        data.to_csv(os.path.join( tmpdirname, filename ))
         print('csv file successfully created', tmpdirname)
 
-        return send_file(os.path.join( tmpdirname, 'file.csv' )), 200
+        return send_file(os.path.join( tmpdirname, filename )), 200
 
     return 500
 
