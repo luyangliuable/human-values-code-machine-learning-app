@@ -15,6 +15,7 @@ from matplotlib.ticker import MaxNLocator
 from collections import Counter
 from itertools import chain
 from project.machine_learning.src.model_trainer import model_trainer
+from project.machine_learning.src import util
 from project.machine_learning.src.csv_file_modifier.modifier import csv_modifier
 from project.machine_learning.src.preprocessor import preprocess as pre
 from project.machine_learning.src.duplicate_remover import comment_database as cdb
@@ -44,26 +45,14 @@ def store_df(data, name) -> bool:
 def plot_graph(counter, savedir):
   modifier = csv_modifier()
 
-  all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
-
-  amount = []
-  labels = []
+  # all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
 
   print('counter is ', counter)
 
-  for key, item in counter.items():
-    # print(key)
-    # print(item)
-    labels.append(key)
-    amount.append(item)
+  labels, amount = util.label_counter(counter)
 
-  # for l in all_labels:
-  #   if l not in labels:
-  #     labels.append(l)
-  #     amount.append(0)
-
-  # print(labels)
-  # print(amount)
+  print(labels)
+  print(amount)
 
   plt.rcParams["figure.figsize"] = [11.0, 3.50]
   plt.rcParams["figure.autolayout"] = True
