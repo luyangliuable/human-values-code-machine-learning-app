@@ -78,8 +78,8 @@ def getChart(dataname):
             if val == val:
                 values.append(val)
 
-
     counter = Counter(values)
+    print(counter)
 
     amount = []
     labels = []
