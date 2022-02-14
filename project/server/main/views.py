@@ -61,6 +61,7 @@ def home():
 
 @main_blueprint.route("/getChart/<dataname>")
 def getChart(dataname):
+    all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
 
     print("getting chart")
 
@@ -72,10 +73,9 @@ def getChart(dataname):
         print(values)
         for val in item:
             print(val)
-        if val == val:
-            values.append(val)
+            if val == val:
+                values.append(val)
 
-    all_labels = ['security', 'self-direction', 'benevolence', 'conformity', 'stimulation', 'power', 'achievement', 'tradition', 'universalism', 'hedonism']
 
     counter = Counter(values)
 
@@ -103,6 +103,7 @@ def getChart(dataname):
         return send_file(os.path.join(tmpdirname, filename)), 200
 
     return 500
+
 
 @main_blueprint.route("/getCSV/<data>")
 def getCSV(data):
