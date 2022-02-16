@@ -88,7 +88,7 @@ languages = {
     "assembly": {
         "multiline_start": '"""',
         "multiline_end": '"""',
-        "single_line": [';', '/*'],
+        "single_line": [';'],
         "strip": ['"""'],
         "format": 'asm',
         "language": "assembly"
@@ -136,7 +136,7 @@ languages = {
         "multiline_start": '\/\*',
         "multiline_end": '\*\/',
         "single_line": ["▓"],
-        "strip": ['/', '\*'],
+        "strip": ['\/', '\*'],
         "format": 'css',
         "language": "css"
     },
@@ -144,7 +144,8 @@ languages = {
     "xml": {
         "multiline_start": '<!--',
         "multiline_end": '-->',
-        "single_line": ['<!--'],
+        "single_line": ['▓'],
+        "strip": ["<", ">", "--", "!"],
         "format": 'xml',
         "language": "xml"
     },
