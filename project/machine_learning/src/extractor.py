@@ -307,7 +307,7 @@ def get_every_multiline(filename: str, language: dict):
                 raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
 
             c = [re.sub('\n', ' ', s) for s in raw_multiline]
-            c = [re.sub('( )+', ' ', s) for s in c]
+            c = [re.sub('\s+', ' ', s) for s in c]
             final_multiline = [s.strip() for s in c]
 
         f.close()
