@@ -130,7 +130,7 @@ def getCSV(data):
         data.to_csv(os.path.join( tmpdirname, filename ))
         print('csv file successfully created', tmpdirname)
 
-        return send_file(os.path.join( tmpdirname, filename, cache_timeout=0, as_attachment=True)), 200
+        return send_file(os.path.join( tmpdirname, filename, as_attachment=True)), 200
 
     return 500
 
