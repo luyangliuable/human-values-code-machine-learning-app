@@ -92,7 +92,7 @@ def background_file_labeler(file, column: str):
 
   prediction = binarizer.inverse_transform(prediction)
 
-  print(prediction)
+  # print(prediction)
 
   data['prediction'] = prediction
 
@@ -174,17 +174,10 @@ def repo(repo_url, branch):
       for file in files:
         print(file)
         new_data = pd.read_csv(file)
-        print(new_data.head)
         new_data = new_data.drop_duplicates(subset=['line'])
         new_data = new_data.drop_duplicates(subset=['location'])
-        print(new_data.head)
-        print(new_data.head)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
-
-      print(data.shape)
-      print(data.head)
-
 
     processor = pre(file, column, dictionary_file='word.pkl')
 
@@ -209,10 +202,7 @@ def repo(repo_url, branch):
         if val == val:
           values.append(val)
 
-    print(values)
-
     value_count = Counter(values)
-    print(value_count)
 
     res = ""
     for key, val in value_count.items():
