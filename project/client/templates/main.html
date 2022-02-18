@@ -91,7 +91,9 @@ function getStatus(taskID) {
             setTimeout(function() {
                 getStatus(res.task_id);
             }, 5000);
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            result_display.innerHTML = `An error occured ${err}`;
+        });
 }
 
  function download(filename) {
@@ -142,7 +144,7 @@ function getStatus(taskID) {
             <button type="button" id="btn" value="Download" class="button">Predicted File Ready</button>
             <br />
             <br />
-            <img id="images" src="" />
+            <img id="images"/>
     </form>
 
 

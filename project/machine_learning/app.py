@@ -1,5 +1,6 @@
 import os
 import time
+import random
 # import git
 from redis import Redis
 import tempfile
@@ -91,7 +92,7 @@ def background_file_labeler(file, column: str):
 
   prediction = binarizer.inverse_transform(prediction)
 
-  print(prediction)
+  # print(prediction)
 
   data['prediction'] = prediction
 
@@ -105,22 +106,19 @@ def background_file_labeler(file, column: str):
       if val == val:
         values.append(val)
 
-  print('Creating chart.')
-
-  dataname = 'completed'
-
-  print(data.head)
+  dataname = random_string()
 
   store_df(data, dataname)
 
   value_count = Counter(values)
+
+  # image = plot_graph(value_count, download_folder)
 
   res = ""
   for key, val in value_count.items():
     res = res + key + ': ' + str(val) + ' '
 
   return {"data": dataname, "count": res}
-
 
 def file_labeler():
   if 'file' not in request.files:
@@ -176,17 +174,10 @@ def repo(repo_url, branch):
       for file in files:
         print(file)
         new_data = pd.read_csv(file)
-        print(new_data.head)
         new_data = new_data.drop_duplicates(subset=['line'])
         new_data = new_data.drop_duplicates(subset=['location'])
-        print(new_data.head)
-        print(new_data.head)
         data = pd.concat([new_data, data])
         print("processing file: " + file)
-
-      print(data.shape)
-      print(data.head)
-
 
     processor = pre(file, column, dictionary_file='word.pkl')
 
@@ -198,11 +189,13 @@ def repo(repo_url, branch):
     prediction = binarizer.inverse_transform(prediction)
 
     data['prediction'] = prediction
-    dataname = 'completed'
+    dataname = random_string()
 
     store_df(data, dataname)
-
     tmp = data['prediction'].values
+
+    print(tmp)
+
     values = []
     for item in tmp:
       for val in item:
@@ -223,6 +216,16 @@ def repo(repo_url, branch):
 def remove_files(files: list[str]) -> None:
   for file in files:
     os.remove(file)
+
+
+def random_string():
+    rand_alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'z', 'x', 'w', '1','2','3','4','5','6','7','8','9', '0']
+
+    res = ""
+    for i in range(random.randint(4, 7)):
+        res += random.choice(rand_alphabet)
+
+    return res
 
 
 if __name__ == '__main__':

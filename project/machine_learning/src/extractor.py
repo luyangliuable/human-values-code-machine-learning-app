@@ -88,7 +88,7 @@ languages = {
     "assembly": {
         "multiline_start": '"""',
         "multiline_end": '"""',
-        "single_line": [';', '/*'],
+        "single_line": [';'],
         "strip": ['"""'],
         "format": 'asm',
         "language": "assembly"
@@ -136,7 +136,7 @@ languages = {
         "multiline_start": '\/\*',
         "multiline_end": '\*\/',
         "single_line": ["▓"],
-        "strip": ['/', '\*'],
+        "strip": ['\/', '\*'],
         "format": 'css',
         "language": "css"
     },
@@ -144,7 +144,8 @@ languages = {
     "xml": {
         "multiline_start": '<!--',
         "multiline_end": '-->',
-        "single_line": ['<!--'],
+        "single_line": ['▓'],
+        "strip": ["<", ">", "--", "!"],
         "format": 'xml',
         "language": "xml"
     },
@@ -306,7 +307,7 @@ def get_every_multiline(filename: str, language: dict):
                 raw_multiline = [re.sub(item, ' ', s) for s in raw_multiline]
 
             c = [re.sub('\n', ' ', s) for s in raw_multiline]
-            c = [re.sub('( )+', ' ', s) for s in c]
+            c = [re.sub('\s+', ' ', s) for s in c]
             final_multiline = [s.strip() for s in c]
 
         f.close()
