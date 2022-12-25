@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
 
-  web2:
+  web:
     build: .
-    image: web2
-    container_name: web2
+    image: web
+    container_name: web
     ports:
       - 5005:5000
     command: python manage.py run -h 0.0.0.0
@@ -16,6 +16,7 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - redis
 
@@ -29,8 +30,9 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - web2
+      - web
       - redis
 
   dashboard:
@@ -43,10 +45,11 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - web2
+      - web
       - redis
       - worker
-      
+
   redis:
     image: redis:6-alpine
